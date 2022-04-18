@@ -40,3 +40,47 @@ export function orderByRating(payload) {
     payload,
   };
 }
+
+export function getNameGame(payload) {
+  return async function (dispatch) {
+    try {
+      var json = await axios.get(
+        "http://localhost:3001/videogames?name=" + payload
+      );
+      return dispatch({
+        type: "GET_NAME_GAMES",
+        payload: json.data,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
+export function getDetails(payload) {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/videogames/" + payload
+      );
+      return dispatch({
+        type: "GET_DETAILS",
+        payload: response.data,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
+export function postGame(payload) {
+  // console.log(payload);
+  return async function () {
+    const response = await axios.post(
+      "http://localhost:3001/videogames/add",
+      payload
+    );
+    // console.log(response);
+    return response;
+  };
+}

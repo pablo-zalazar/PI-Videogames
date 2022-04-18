@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 
 import Card from "./Card";
 import Paginado from "./Paginado";
+import SearchBar from "./SearchBar";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -75,29 +76,53 @@ export default function Home() {
       <h1>All Games</h1>
       <button onClick={(e) => handleClick(e)}>Reload</button>
       <div>
-        <span>Nombre</span>
-        <select onChange={(e) => handleSortName(e)}>
-          <option value="asc">Asc</option>
-          <option value="desc">Des</option>
-        </select>
+        <div>
+          <p>Order by name</p>
+          <select onChange={(e) => handleSortName(e)}>
+            <option disabled selected>
+              -
+            </option>
+            <option value="asc">A-Z</option>
+            <option value="desc">Z-A</option>
+          </select>
+        </div>
 
-        <span>Rating</span>
-        <select onChange={(e) => handleSortRating(e)}>
-          <option value="asc">Asc</option>
-          <option value="desc">Des</option>
-        </select>
+        <div>
+          <p>Order by rating</p>
+          <select onChange={(e) => handleSortRating(e)}>
+            <option disabled selected>
+              -
+            </option>
+            <option value="asc">Asc</option>
+            <option value="desc">Des</option>
+          </select>
+        </div>
 
-        <select onChange={(e) => handleFilterSource(e)}>
-          <option value="all">All</option>
-          <option value="api">API</option>
-          <option value="created">CREATED</option>
-        </select>
+        <div>
+          <p>show</p>
+          <select onChange={(e) => handleFilterSource(e)}>
+            <option disabled selected>
+              -
+            </option>
+            <option value="all">All</option>
+            <option value="api">API</option>
+            <option value="created">CREATED</option>
+          </select>
+        </div>
 
-        <select onChange={(e) => handleFilterGenre(e)}>
-          {allGenres?.map((g) => (
-            <option value={g}>{g}</option>
-          ))}
-        </select>
+        <div>
+          <p>select genre</p>
+          <select onChange={(e) => handleFilterGenre(e)}>
+            <option disabled selected>
+              select
+            </option>
+            {allGenres?.map((g) => (
+              <option value={g}>{g}</option>
+            ))}
+          </select>
+        </div>
+
+        <SearchBar />
 
         <Paginado
           gamesPerPage={gamesPerPage}

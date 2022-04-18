@@ -6,7 +6,7 @@ export default function LandingPage() {
   return (
     <div>
       <h1>WELCOME</h1>
-      <Link to="/home">
+      <Link to="/videogames">
         <button>Enter</button>
       </Link>
     </div>

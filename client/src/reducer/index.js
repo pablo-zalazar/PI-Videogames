@@ -2,6 +2,7 @@ let initialState = {
   genres: [],
   games: [],
   allGames: [],
+  detail: [],
 };
 
 function rootReducer(state = initialState, action) {
@@ -16,6 +17,11 @@ function rootReducer(state = initialState, action) {
         ...state,
         games: action.payload,
         allGames: action.payload,
+      };
+    case "GET_NAME_GAMES":
+      return {
+        ...state,
+        games: action.payload,
       };
     case "GET_GAMES_SOURCE":
       const sourceFilter =
@@ -59,6 +65,15 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         games: sortedRating,
+      };
+    case "GET_DETAILS":
+      return {
+        ...state,
+        detail: action.payload,
+      };
+    case "POST_GAME":
+      return {
+        ...state,
       };
     default:
       return {
