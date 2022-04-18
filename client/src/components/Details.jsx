@@ -30,10 +30,20 @@ export default function Details(props) {
             height="125px"
           />
           <p>{myGame.description}</p>
-          <p>{myGame.released}</p>
-          <p>{myGame.rating}</p>
-          <p>{myGame.platforms}</p>
-          <p>{myGame.genres}</p>
+          <p>released: {myGame.released}</p>
+          <p>Rating {myGame.rating}</p>
+          <p>platforms</p>
+          <ul>
+            {myGame.platforms.map((g) => (
+              <li>{g}</li>
+            ))}
+          </ul>
+          <p>Genres</p>
+          <ul>
+            {myGame.genres.map((g) => (
+              <li>{g}</li>
+            ))}
+          </ul>
         </div>
       ) : (
         <p>Loading</p>

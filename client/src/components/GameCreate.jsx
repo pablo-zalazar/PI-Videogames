@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,11 +13,13 @@ function validate(input) {
   if (!input.description) {
     errors.description = "Description is required";
   }
-  if (input.rating < 0 || input.rating > 5) {
-    errors.rating = "rating must be a number between 0 and 5";
-  }
 
   return errors;
+}
+
+function disabledSubmit(errors) {
+  if (Object.keys(errors).length > 0) return true;
+  return false;
 }
 
 export default function GameCreate() {
@@ -25,7 +27,13 @@ export default function GameCreate() {
   const allGenres = useSelector((state) => state.genres);
   const history = useHistory();
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    name: "Name is required",
+    description: "Description is required",
+  });
+
+  const [inputDisabled, setInputDisabled] = useState(true);
+
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -40,6 +48,10 @@ export default function GameCreate() {
     dispatch(getGenres());
   }, []);
 
+  useEffect(() => {
+    setInputDisabled(disabledSubmit(errors));
+  }, [errors]);
+
   function handleChange(e) {
     e.preventDefault();
     setInput({
@@ -52,7 +64,7 @@ export default function GameCreate() {
         [e.target.name]: e.target.value,
       })
     );
-    // console.log(input);
+    // console.log(errors);
   }
 
   function handleSelect(e) {
@@ -72,6 +84,9 @@ export default function GameCreate() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    input.name =
+      input.name.charAt(0).toUpperCase() +
+      input.name.toLocaleLowerCase().slice(1);
     input.platforms = input.platforms.split(" ");
     dispatch(postGame(input));
     alert("Game Created");
@@ -93,10 +108,9 @@ export default function GameCreate() {
         <button>return</button>
       </Link>
       <h1>Create Game</h1>
-      <p>* Requires fields</p>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
-          <label>Name* </label>
+          <label>Name </label>
           <input
             type="text"
             value={input.name}
@@ -106,7 +120,7 @@ export default function GameCreate() {
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
         <div>
-          <label>Description* </label>
+          <label>Description </label>
           <textarea
             value={input.description}
             name="description"
@@ -180,7 +194,9 @@ export default function GameCreate() {
           ))}
         </ul>
 
-        <button type="submit">Create</button>
+        <button disabled={inputDisabled} type="submit">
+          Create
+        </button>
       </form>
     </div>
   );

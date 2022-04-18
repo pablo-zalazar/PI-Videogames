@@ -32,17 +32,26 @@ function rootReducer(state = initialState, action) {
         ...state,
         games: action.payload === "all" ? state.allGames : sourceFilter,
       };
+    case "GET_GAMES_GENRE":
+      const genreFilter = state.allGames.filter((g) =>
+        g.genres.includes(action.payload)
+      );
+      console.log(genreFilter);
+      return {
+        ...state,
+        games: action.payload === "All" ? state.allGames : genreFilter,
+      };
     case "ORDER_BY_NAME":
       let sortedName =
         action.payload === "asc"
           ? state.games.sort(function (a, b) {
-              if (a.name > b.name) return 1;
-              if (a.name < b.name) return -1;
+              if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+              if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
               return 0;
             })
           : state.games.sort(function (a, b) {
-              if (a.name > b.name) return -1;
-              if (a.name < b.name) return 1;
+              if (a.name.toLowerCase() > b.name.toLowerCase()) return -1;
+              if (a.name.toLowerCase() < b.name.toLowerCase()) return 1;
               return 0;
             });
       return {

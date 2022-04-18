@@ -5,6 +5,7 @@ import {
   getGenres,
   getGames,
   filterBySource,
+  filterByGenre,
   orderByName,
   orderByRating,
 } from "../actions";
@@ -49,12 +50,13 @@ export default function Home() {
   }
 
   function handleFilterGenre(e) {
-    // e.preventDefault();
-    // dispatch(filterBySource(e.target.value));
-    // setCurrentPage(1);
+    e.preventDefault();
+    dispatch(filterByGenre(e.target.value));
+    setCurrentPage(1);
   }
 
   function handleSortName(e) {
+    console.log(e.target.value);
     e.preventDefault();
     dispatch(orderByName(e.target.value));
     setCurrentPage(1);
@@ -113,9 +115,7 @@ export default function Home() {
         <div>
           <p>select genre</p>
           <select onChange={(e) => handleFilterGenre(e)}>
-            <option disabled selected>
-              select
-            </option>
+            <option>All</option>
             {allGenres?.map((g) => (
               <option value={g}>{g}</option>
             ))}

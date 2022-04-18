@@ -27,6 +27,13 @@ export function filterBySource(payload) {
   };
 }
 
+export function filterByGenre(payload) {
+  return {
+    type: "GET_GAMES_GENRE",
+    payload,
+  };
+}
+
 export function orderByName(payload) {
   return {
     type: "ORDER_BY_NAME",
