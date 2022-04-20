@@ -1,0 +1,21 @@
+.paginado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  font-size: 18px;
+  margin: 10px auto;
+}
+
+.paginado li {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.next_previous {
+  cursor: pointer;
+}
+
+.current {
+  font-weight: 700;
+}

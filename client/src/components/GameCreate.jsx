@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { postGame, getGenres } from "../actions/index";
 
+import NavBar from "./NavBar";
+
+import s from "./GameCreate.module.css";
+
 function validate(input) {
   let errors = {};
   if (!input.name) {
@@ -78,7 +82,7 @@ export default function GameCreate() {
   function handleDelete(el) {
     setInput({
       ...input,
-      genres: input.genres.filter((g) => g !== el.target.innerText),
+      genres: input.genres.filter((g) => g !== el.target.name),
     });
   }
 
@@ -104,100 +108,102 @@ export default function GameCreate() {
 
   return (
     <div>
-      <Link to="/videogames">
-        <button>return</button>
-      </Link>
-      <h1>Create Game</h1>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <div>
-          <label>Name </label>
-          <input
-            type="text"
-            value={input.name}
-            name="name"
-            onChange={(e) => handleChange(e)}
-          />
-          {errors.name && <span className="error">{errors.name}</span>}
-        </div>
-        <div>
-          <label>Description </label>
-          <textarea
-            value={input.description}
-            name="description"
-            cols="30"
-            rows="5"
-            onChange={(e) => handleChange(e)}
-          />
-          {errors.description && (
-            <span className="error">{errors.description}</span>
-          )}
-        </div>
-        <div>
-          <label>Image (url) </label>
-          <input
-            type="text"
-            value={input.image}
-            name="image"
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <div>
-          <label>Released </label>
-          <input
-            type="text"
-            value={input.released}
-            name="released"
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <div>
-          <label>Rating (0-5) </label>
-          <input
-            type="number"
-            step={0.01}
-            value={input.rating}
-            name="rating"
-            min="0"
-            max="5"
-            onChange={(e) => handleChange(e)}
-          />
-          {errors.rating && <p className="error">{errors.rating}</p>}
-        </div>
-        <div>
-          <label>Platforms (ps4 ps5 etc) </label>
-          <input
-            type="text"
-            value={input.platforms}
-            name="platforms"
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <div>
-          <label>Genres </label>
-          <select onChange={(e) => handleSelect(e)}>
-            <option selected disabled hidden>
-              {" "}
-              select genres{" "}
-            </option>
-            {allGenres?.map((g) => (
-              <option value={g}>{g}</option>
+      <NavBar />
+      <div className={s.main}>
+        <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
+          <h1>Create Game</h1>
+          <div>
+            <p>Name </p>
+            <input
+              type="text"
+              value={input.name}
+              name="name"
+              onChange={(e) => handleChange(e)}
+            />
+            {errors.name && <span className={s.error}>{errors.name}</span>}
+          </div>
+          <div>
+            <p>Description </p>
+            <textarea
+              value={input.description}
+              name="description"
+              cols="30"
+              rows="5"
+              onChange={(e) => handleChange(e)}
+            />
+            {errors.description && (
+              <span className={s.error}>{errors.description}</span>
+            )}
+          </div>
+          <div>
+            <p>Image (url) </p>
+            <input
+              type="text"
+              value={input.image}
+              name="image"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div>
+            <p>Released </p>
+            <input
+              type="text"
+              value={input.released}
+              name="released"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div>
+            <p>Rating (0-5) </p>
+            <input
+              type="number"
+              step={0.01}
+              value={input.rating}
+              name="rating"
+              min="0"
+              max="5"
+              onChange={(e) => handleChange(e)}
+            />
+            {errors.rating && <p className="error">{errors.rating}</p>}
+          </div>
+          <div>
+            <p>Platforms (ps4 ps5 etc) </p>
+            <input
+              type="text"
+              value={input.platforms}
+              name="platforms"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div>
+            <p>Genres </p>
+            <select onChange={(e) => handleSelect(e)}>
+              <option selected disabled hidden>
+                {" "}
+                select genres{" "}
+              </option>
+              {allGenres?.map((g) => (
+                <option value={g}>{g}</option>
+              ))}
+            </select>
+          </div>
+
+          <ul>
+            {input.genres.map((g) => (
+              <li>
+                <p>{g}</p>
+                <button type="button" name={g} onClick={(g) => handleDelete(g)}>
+                  X
+                </button>
+              </li>
             ))}
-          </select>
-        </div>
+          </ul>
 
-        <ul>
-          {input.genres.map((g) => (
-            <li>
-              {g}
-              <button onClick={(g) => handleDelete(g)}>X</button>
-            </li>
-          ))}
-        </ul>
-
-        <button disabled={inputDisabled} type="submit">
-          Create
-        </button>
-      </form>
+          <button disabled={inputDisabled} type="submit" className={s.submit}>
+            Create
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,71 @@
+.main {
+  min-height: 100vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  width: 400px;
+  background-color: #bfbfbf;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 10px;
+  padding: 20px;
+}
+
+.form h1 {
+  text-align: center;
+}
+
+.form p {
+  font-weight: 500;
+}
+
+.form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form input,
+.form textarea,
+.form select {
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.form ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form ul li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form ul li button {
+  padding: 5px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.submit {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+  .form {
+    width: 100%;
+  }
+}

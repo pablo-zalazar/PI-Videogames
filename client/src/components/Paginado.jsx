@@ -1,21 +1,54 @@
 import React from "react";
 
-export default function Paginado({ gamesPerPage, allGames, paginado }) {
-  const pageNumbers = [];
+import s from "./Paginado.module.css";
 
-  for (let i = 1; i <= Math.ceil(allGames / gamesPerPage); i++) {
+export default function Paginado({
+  gamesPerPage,
+  allGames,
+  paginado,
+  currentPage,
+}) {
+  const pages = Math.ceil(allGames / gamesPerPage);
+  const pageNumbers = [];
+  for (let i = 1; i <= pages; i++) {
     pageNumbers.push(i);
   }
 
   return (
     <nav>
-      <ul className="paginado">
-        {pageNumbers &&
-          pageNumbers.map((number) => (
-            <li className="number" key={number}>
-              <a onClick={() => paginado(number)}>{number}</a>
-            </li>
-          ))}
+      <h3>Pages</h3>
+      <ul>
+        <div className={s.paginado}>
+          {currentPage - 1 > 0 ? (
+            <p
+              onClick={() => paginado(currentPage - 1)}
+              className={s.next_previous}
+            >
+              previous
+            </p>
+          ) : null}
+          {pageNumbers &&
+            pageNumbers.map((number) => (
+              <li className="number" key={number}>
+                {number === currentPage ? (
+                  <a onClick={() => paginado(number)} className={s.current}>
+                    {number}
+                  </a>
+                ) : (
+                  <a onClick={() => paginado(number)}>{number}</a>
+                )}
+              </li>
+            ))}
+          {pages > currentPage ? (
+            <p
+              onClick={() => paginado(currentPage + 1)}
+              className={s.next_previous}
+            >
+              {" "}
+              next
+            </p>
+          ) : null}
+        </div>
       </ul>
     </nav>
   );

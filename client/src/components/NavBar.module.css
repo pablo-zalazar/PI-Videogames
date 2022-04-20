@@ -1,0 +1,29 @@
+.navbar {
+  background-color: #211f20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.navbar button {
+  font-size: 18px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #211f20;
+  padding: 10px 5px;
+}
+
+.navbar button:hover {
+  cursor: pointer;
+  background-color: #2d2d2d;
+}
+
+.navbar img {
+  height: 70px;
+}
+
+.navbar img:hover {
+  cursor: pointer;
+}

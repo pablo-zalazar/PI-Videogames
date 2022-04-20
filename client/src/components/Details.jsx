@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetails } from "../actions";
 
+import NavBar from "./NavBar";
+
 export default function Details(props) {
   //   console.log(props);
 
@@ -17,9 +19,8 @@ export default function Details(props) {
 
   return (
     <div>
-      <Link to="/videogames">
-        <button>Return</button>
-      </Link>
+      <NavBar />
+
       {Object.keys(myGame).length > 0 ? (
         <div>
           <h1>{myGame.name}</h1>

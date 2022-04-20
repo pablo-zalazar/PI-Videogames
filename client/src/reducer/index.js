@@ -36,7 +36,7 @@ function rootReducer(state = initialState, action) {
       const genreFilter = state.allGames.filter((g) =>
         g.genres.includes(action.payload)
       );
-      console.log(genreFilter);
+      // console.log(genreFilter);
       return {
         ...state,
         games: action.payload === "All" ? state.allGames : genreFilter,
