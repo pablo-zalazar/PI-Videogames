@@ -20,6 +20,13 @@ export function getGames() {
   };
 }
 
+export function setCurrentPage(payload) {
+  return {
+    type: "SET_CURRENT_PAGE",
+    payload,
+  };
+}
+
 export function filterBySource(payload) {
   return {
     type: "GET_GAMES_SOURCE",

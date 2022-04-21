@@ -3,6 +3,7 @@ let initialState = {
   games: [],
   allGames: [],
   detail: [],
+  currentPage: 1,
 };
 
 function rootReducer(state = initialState, action) {
@@ -18,25 +19,34 @@ function rootReducer(state = initialState, action) {
         games: action.payload,
         allGames: action.payload,
       };
+    case "SET_CURRENT_PAGE":
+      return {
+        ...state,
+        currentPage: action.payload,
+      };
     case "GET_NAME_GAMES":
       return {
         ...state,
         games: action.payload,
       };
     case "GET_GAMES_SOURCE":
-      const sourceFilter =
+      let sourceFilter =
         action.payload === "api"
           ? state.allGames.filter((g) => !g.createdInDb)
           : state.allGames.filter((g) => g.createdInDb);
+      sourceFilter =
+        Object.keys(sourceFilter).length === 0 ? ["empty"] : sourceFilter;
       return {
         ...state,
         games: action.payload === "all" ? state.allGames : sourceFilter,
       };
     case "GET_GAMES_GENRE":
-      const genreFilter = state.allGames.filter((g) =>
+      let genreFilter = state.allGames.filter((g) =>
         g.genres.includes(action.payload)
       );
       // console.log(genreFilter);
+      genreFilter =
+        Object.keys(genreFilter).length === 0 ? ["empty"] : genreFilter;
       return {
         ...state,
         games: action.payload === "All" ? state.allGames : genreFilter,

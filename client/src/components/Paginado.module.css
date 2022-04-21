@@ -4,16 +4,16 @@
   align-items: center;
   list-style: none;
   font-size: 18px;
-  margin: 10px auto;
+  margin: auto;
 }
 
-.paginado li {
-  margin: 0 5px;
+.paginado > * {
+  padding: 5px;
   cursor: pointer;
 }
 
-.next_previous {
-  cursor: pointer;
+.paginado > *:hover {
+  background-color: #989898;
 }
 
 .current {

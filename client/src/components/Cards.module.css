@@ -1,0 +1,52 @@
+.list {
+  margin: auto;
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+}
+
+.list a {
+  text-decoration: none;
+}
+
+.list a:hover {
+  background-color: #989898;
+}
+
+.loading {
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  border: 8px solid #ccc;
+  border-top-color: #000000;
+  border-top-style: groove;
+  border-radius: 100%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* @media (max-width: 1000px) {
+  .list {
+     justify-content: center; 
+  }
+} */
+
+@media (max-width: 700px) {
+  .list {
+    width: 300px;
+    justify-content: center;
+  }
+}

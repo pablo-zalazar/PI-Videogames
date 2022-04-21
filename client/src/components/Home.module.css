@@ -2,7 +2,7 @@
   min-height: 100vh;
   width: 80vw;
   margin: auto;
-  padding-top: 50px;
+  padding-top: 20px;
   background-color: #bfbfbf;
   opacity: 0.9;
   display: flex;
@@ -34,26 +34,9 @@
   flex-basis: 75%;
 }
 
-.list {
-  margin: auto;
-  display: flex;
-  justify-content: flex-start;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.list a {
-  text-decoration: none;
-  margin-bottom: 30px;
-}
-
 @media (max-width: 1000px) {
   .main {
     width: 700px;
-  }
-
-  .list {
-    justify-content: center;
   }
 }
 
@@ -61,10 +44,5 @@
   .main {
     width: 100%;
     flex-direction: column;
-  }
-
-  .list {
-    width: 300px;
-    margin: auto;
   }
 }

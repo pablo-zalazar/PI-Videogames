@@ -1,0 +1,68 @@
+.main {
+  min-height: 100vh;
+  width: 80vw;
+  margin: auto;
+  padding-top: 70px;
+}
+
+.main div {
+  height: 100vh;
+  background-color: #bfbfbf;
+  padding-top: 100px;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
+}
+
+.main h1 {
+  position: relative;
+  animation: left 1.5s linear;
+}
+
+@keyframes left {
+  0% {
+    left: -1000px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+
+.main button {
+  font-size: 24px;
+  width: 100px;
+  height: 70px;
+  background-color: transparent;
+  border: 5px solid #000000;
+  border-radius: 20px;
+  position: relative;
+  animation: right 1.5s linear;
+}
+
+@keyframes right {
+  0% {
+    left: 1000px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+
+.main button:hover {
+  cursor: pointer;
+  background-color: #989898;
+}
+
+@media (max-width: 1000px) {
+  .main {
+    width: 700px;
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    width: 100%;
+  }
+}

@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { postGame, getGenres } from "../actions/index";

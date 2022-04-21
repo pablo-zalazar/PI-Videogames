@@ -1,15 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import s from "./Paginado.module.css";
 
-export default function Paginado({
-  gamesPerPage,
-  allGames,
-  paginado,
-  currentPage,
-}) {
+export default function Paginado({ gamesPerPage, allGames, paginado }) {
   const pages = Math.ceil(allGames / gamesPerPage);
   const pageNumbers = [];
+
+  const currentPage = useSelector((state) => state.currentPage);
   for (let i = 1; i <= pages; i++) {
     pageNumbers.push(i);
   }
