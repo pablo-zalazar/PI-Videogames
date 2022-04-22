@@ -8,6 +8,8 @@ const { APIKEY } = process.env;
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
+
+// Search API games
 const getAllApiGames = async () => {
   let games = [];
   for (let i = 1; i < 6; i++) {
@@ -30,6 +32,7 @@ const getAllApiGames = async () => {
   return games;
 };
 
+// Search DataBase games
 const getDbGames = async () => {
   let dbGames = await Videogame.findAll({
     // incluye el modelo genre para poder acceder al nombre y id de los distintos generos
@@ -59,6 +62,7 @@ const getDbGames = async () => {
   });
 };
 
+// Search All games
 const getAllGames = async () => {
   const apiGames = await getAllApiGames();
   const dbGames = await getDbGames();
@@ -66,6 +70,7 @@ const getAllGames = async () => {
   return totalGames;
 };
 
+// Search API game by id
 // https://api.rawg.io/api/games/{id}
 const getApiGameId = async (id) => {
   const game = await axios.get(
@@ -82,6 +87,7 @@ const getApiGameId = async (id) => {
   };
 };
 
+// Search game by id
 // 5286
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -92,10 +98,11 @@ router.get("/:id", async (req, res) => {
     game = (await getDbGames()).find((g) => g.id === id);
   }
   game.length !== 0
-    ? res.status(200).send(game)
+    ? res.status(200).json(game)
     : res.status(404).send("NOT FOUND");
 });
 
+// Search all games or game by name
 router.get("/", async (req, res) => {
   let games = await getAllGames();
   const name = req.query.name;
@@ -105,32 +112,73 @@ router.get("/", async (req, res) => {
     );
   }
   games.length
-    ? res.status(200).send(games)
+    ? res.status(200).json(games)
     : res.status(404).send("game not found");
 });
 
+// Delete game by id
+router.delete("/delete/:idgame", async (req, res) => {
+  const { idgame } = req.params;
+  // console.log(idgame);
+  try {
+    await Videogame.destroy({
+      where: { id: idgame },
+    });
+    res.status(200).send("Juego eliminado");
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+// Update game by id
+router.put("/update", async (req, res) => {
+  const { id, name, description, image, released, rating, platforms, genres } =
+    req.body;
+
+  try {
+    await Videogame.update(
+      {
+        name,
+        description,
+        image,
+        released,
+        rating,
+        platforms,
+      },
+      { where: { id } }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+// Add game
 router.post("/add", async (req, res) => {
   const { name, description, image, released, rating, platforms, genres } =
     req.body;
 
-  let gameCreated = await Videogame.create({
-    name,
-    description,
-    image,
-    released,
-    rating,
-    platforms,
-  });
+  try {
+    let gameCreated = await Videogame.create({
+      name,
+      description,
+      image,
+      released,
+      rating,
+      platforms,
+    });
 
-  // busca en el modelo genre todos los que coincidan con los pasados por body
-  let genreDb = await Genre.findAll({
-    where: { name: genres },
-  });
+    // busca en el modelo genre todos los que coincidan con los pasados por body
+    let genreDb = await Genre.findAll({
+      where: { name: genres },
+    });
 
-  // addNombreModelo es un metodo de sequelize que trae del modelo (genre) lo que se le pasa
-  gameCreated.addGenre(genreDb);
+    // addNombreModelo es un metodo de sequelize que trae del modelo (genre) lo que se le pasa
+    gameCreated.addGenre(genreDb);
 
-  res.status(200).send("juego creado");
+    res.status(200).send("Game Created");
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = router;

@@ -44,12 +44,9 @@ export default function Cards() {
             {currentGames?.map((g) => {
               return (
                 <Link to={"/videogames/" + g.id}>
-                  <Card
-                    name={g.name}
-                    image={g.image}
-                    genres={g.genres}
-                    key={g.id}
-                  />
+                  <div key={g.id}>
+                    <Card name={g.name} image={g.image} genres={g.genres} />
+                  </div>
                 </Link>
               );
             })}

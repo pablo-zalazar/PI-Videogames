@@ -2,21 +2,29 @@ import axios from "axios";
 
 export function getGenres() {
   return async function (dispatch) {
-    let json = await axios.get("http://localhost:3001/genres");
-    return dispatch({
-      type: "GET_GENRES",
-      payload: json.data,
-    });
+    try {
+      let json = await axios.get("http://localhost:3001/genres");
+      return dispatch({
+        type: "GET_GENRES",
+        payload: json.data,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 }
 
 export function getGames() {
   return async function (dispatch) {
-    let json = await axios.get("http://localhost:3001/videogames");
-    return dispatch({
-      type: "GET_GAMES",
-      payload: json.data,
-    });
+    try {
+      let json = await axios.get("http://localhost:3001/videogames");
+      return dispatch({
+        type: "GET_GAMES",
+        payload: json.data,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 }
 
@@ -96,5 +104,32 @@ export function postGame(payload) {
     );
     // console.log(response);
     return response;
+  };
+}
+
+export function deleteGame(payload) {
+  return async function () {
+    try {
+      const response = await axios.delete(
+        "http://localhost:3001/videogames/delete/" + payload
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
+export function updateGame(payload) {
+  return async function () {
+    try {
+      const response = await axios.put(
+        "http://localhost:3001/videogames/update",
+        payload
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
   };
 }

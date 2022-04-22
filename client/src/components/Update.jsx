@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { postGame, getGenres } from "../actions/index";
+import { getGenres, updateGame } from "../actions/index";
 
 import NavBar from "./NavBar";
 
@@ -31,26 +31,23 @@ function disabledSubmit(errors) {
 
 export default function GameCreate() {
   const dispatch = useDispatch();
-  const allGenres = useSelector((state) => state.genres);
   const history = useHistory();
 
-  const [errors, setErrors] = useState({
-    name: "Name is required",
-    description: "Description is required",
-    platforms: "Platforms are required",
-  });
+  const allGenres = useSelector((state) => state.genres);
+  const myGame = useSelector((state) => state.detail);
+
+  const [errors, setErrors] = useState({});
 
   const [inputDisabled, setInputDisabled] = useState(true);
   const [ratingError, setRatingError] = useState("");
-
   const [input, setInput] = useState({
-    name: "",
-    description: "",
-    image: "",
-    released: "2000-01-01",
-    rating: "",
-    platforms: "",
-    genres: [],
+    name: myGame.name,
+    description: myGame.description,
+    image: myGame.image,
+    released: myGame.released,
+    rating: myGame.rating.toString(),
+    platforms: myGame.platforms.join(" "),
+    genres: myGame.genres,
   });
 
   useEffect(() => {
@@ -95,14 +92,15 @@ export default function GameCreate() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     if (Number(input.rating) || input.rating === "") {
       if (input.rating.length < 4) {
         if (input.rating <= 5 && input.rating >= 0) {
           if (input.rating[0] !== ".") {
+            console.log(input);
             dispatch(
-              postGame({
+              updateGame({
                 ...input,
+                id: myGame.id,
                 platforms: input.platforms.split(" "),
                 rating: input.rating === "" ? 0 : input.rating,
               })
@@ -118,19 +116,20 @@ export default function GameCreate() {
               genres: [],
             });
             history.push("/videogames");
-          }
-        }
-      }
-    }
+          } else console.log("1");
+        } else console.log("2");
+      } else console.log("3");
+    } else console.log("4");
     setRatingError("Invalid value");
   }
 
   return (
     <div>
+      {console.log(myGame)}
       <NavBar />
       <div className={s.main}>
         <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
-          <h1>Create Game</h1>
+          <h1>Create Update</h1>
           <div>
             <p>Name </p>
             <input
@@ -221,7 +220,7 @@ export default function GameCreate() {
           </ul>
 
           <button disabled={inputDisabled} type="submit" className={s.submit}>
-            Create
+            Update
           </button>
         </form>
       </div>

@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDetails } from "../actions";
+import { Link, useHistory } from "react-router-dom";
+import { getDetails, deleteGame } from "../actions";
 
 import NavBar from "./NavBar";
 
@@ -11,20 +12,28 @@ export default function Details(props) {
   //   console.log(props);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getDetails(props.match.params.id));
   }, [dispatch]);
 
   const myGame = useSelector((state) => state.detail);
+  const created = myGame.createdInDb ? true : false;
+
+  function handleDelete(e) {
+    e.preventDefault();
+    dispatch(deleteGame(myGame.id));
+    alert("Game deleted");
+    history.push("/videogames");
+  }
 
   return (
     <div>
       <NavBar />
-
       {Object.keys(myGame).length > 0 ? (
         <div className={s.main}>
-          <div className={s.page}>
+          <div className={created ? s.page2 : s.page1}>
             <img src={myGame.image} alt="not found" className={s.image} />
 
             <div className={s.info}>
@@ -54,6 +63,13 @@ export default function Details(props) {
                 ))}
               </ul>
             </fieldset>
+
+            <div hidden={!created} className={s.buttons}>
+              <button onClick={(e) => handleDelete(e)}>Delete</button>
+              <Link to={"/videogames/update"}>
+                <button>Update</button>
+              </Link>
+            </div>
           </div>
         </div>
       ) : null}

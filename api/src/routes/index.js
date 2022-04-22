@@ -25,14 +25,9 @@ const getGenres = async () => {
   return allGenres;
 };
 
-router.get("/home", async (req, res) => {
-  const allGenres = await getGenres();
-  res.send(allGenres);
-});
-
 router.get("/genres", async (req, res) => {
   const allGenres = await getGenres();
-  res.send(allGenres);
+  res.json(allGenres);
 });
 
 // import routes y accede con /videogames

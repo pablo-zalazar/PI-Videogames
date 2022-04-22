@@ -79,10 +79,11 @@ export default function Home() {
               </div>
               <div>
                 <p>Source</p>
-                <select onChange={(e) => handleFilterSource(e)}>
-                  <option disabled selected>
-                    -
-                  </option>
+                <select
+                  onChange={(e) => handleFilterSource(e)}
+                  defaultValue="-"
+                >
+                  <option disabled>-</option>
                   <option value="all">All</option>
                   <option value="api">API</option>
                   <option value="created">CREATED</option>
@@ -93,10 +94,8 @@ export default function Home() {
             <h2>ORDER</h2>
             <div>
               <p>Order by name</p>
-              <select onChange={(e) => handleSortName(e)}>
-                <option disabled selected>
-                  -
-                </option>
+              <select onChange={(e) => handleSortName(e)} defaultValue="-">
+                <option disabled>-</option>
                 <option value="asc">A-Z</option>
                 <option value="desc">Z-A</option>
               </select>
@@ -104,10 +103,8 @@ export default function Home() {
 
             <div>
               <p>Order by rating</p>
-              <select onChange={(e) => handleSortRating(e)}>
-                <option disabled selected>
-                  -
-                </option>
+              <select onChange={(e) => handleSortRating(e)} defaultValue="-">
+                <option disabled>-</option>
                 <option value="asc">Asc</option>
                 <option value="desc">Des</option>
               </select>
