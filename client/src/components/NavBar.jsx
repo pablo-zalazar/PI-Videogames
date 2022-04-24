@@ -8,7 +8,7 @@ export default function NavBar() {
   return (
     <nav className={s.navbar}>
       <Link to="/videogames">
-        <img src={logo} />
+        <img src={logo} alt="icon" />
       </Link>
       <Link to="/videogames/add">
         <button>+ Add Game</button>

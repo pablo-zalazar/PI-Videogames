@@ -24,7 +24,7 @@ export default function Cards() {
 
   useEffect(() => {
     dispatch(getGames());
-  }, []);
+  }, [dispatch]);
 
   const paginado = (pageNumber) => {
     dispatch(setCurrentPage(pageNumber));
@@ -45,7 +45,13 @@ export default function Cards() {
               return (
                 <Link to={"/videogames/" + g.id}>
                   <div key={g.id}>
-                    <Card name={g.name} image={g.image} genres={g.genres} />
+                    <Card
+                      name={g.name}
+                      image={g.image}
+                      rating={g.rating}
+                      genres={g.genres}
+                      key={g.id}
+                    />
                   </div>
                 </Link>
               );

@@ -49,34 +49,45 @@ export function filterByGenre(payload) {
   };
 }
 
-export function orderByName(payload) {
+export function order(payload) {
   return {
-    type: "ORDER_BY_NAME",
-    payload,
-  };
-}
-
-export function orderByRating(payload) {
-  return {
-    type: "ORDER_BY_RATING",
+    type: "ORDER",
     payload,
   };
 }
 
 export function getNameGame(payload) {
-  return async function (dispatch) {
-    try {
-      var json = await axios.get(
-        "http://localhost:3001/videogames?name=" + payload
+  return function (dispatch) {
+    axios
+      .get("http://localhost:3001/videogames?name=" + payload)
+      .then((json) => json.data)
+      .then((json) => dispatch({ type: "GET_NAME_GAMES", payload: json }))
+      .catch((e) =>
+        dispatch({
+          type: "GET_NAME_GAMES",
+          payload: ["empty"],
+        })
       );
-      return dispatch({
-        type: "GET_NAME_GAMES",
-        payload: json.data,
-      });
-    } catch (e) {
-      console.log(e);
-    }
   };
+
+  // return async function (dispatch) {
+  //   try {
+  //     var json = await axios.get(
+  //       "http://localhost:3001/videogames?name=" + payload
+  //     );
+  //     return dispatch({
+  //       type: "GET_NAME_GAMES",
+  //       payload: json.data,
+  //     });
+  //   } catch (e) {
+  //     // console.log("json");
+  //     // console.log(e);
+  //     return dispatch({
+  //       type: "GET_NAME_GAMES",
+  //       payload: ["empty"],
+  //     });
+  //   }
+  // };
 }
 
 export function getDetails(payload) {
@@ -92,6 +103,12 @@ export function getDetails(payload) {
     } catch (e) {
       console.log(e);
     }
+  };
+}
+
+export function resetDetail() {
+  return {
+    type: "RESET_DETAIL",
   };
 }
 

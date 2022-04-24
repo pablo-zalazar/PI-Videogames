@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <div className={s.main}>
       <div>
-        <h1>WELCOME TO VIDEOGAMES API PAGE</h1>
+        <h1>WELCOME TO HENRY GAMES</h1>
         <Link to="/videogames">
           <button>Enter</button>
         </Link>

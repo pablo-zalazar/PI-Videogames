@@ -42,7 +42,6 @@ export default function Paginado({ gamesPerPage, allGames, paginado }) {
               onClick={() => paginado(currentPage + 1)}
               className={s.next_previous}
             >
-              {" "}
               next
             </p>
           ) : null}

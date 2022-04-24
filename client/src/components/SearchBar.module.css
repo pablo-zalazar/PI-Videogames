@@ -12,7 +12,19 @@
 }
 
 .button {
-  height: 25px;
+  border: 1px solid #211f20;
+  border-radius: 10px;
+  background-color: #999898;
+  cursor: pointer;
+  height: 40px;
   width: 70px;
   padding: 3px;
+}
+
+.button:hover {
+  background-color: #7c7c7c;
+}
+
+.error {
+  color: #ff0000;
 }

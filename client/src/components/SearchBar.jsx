@@ -8,16 +8,35 @@ import s from "./SearchBar.module.css";
 export default function SearchBar() {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [inputDisabled, setInputDisabled] = useState(true);
+
+  const re = /^[0-9a-zA-ZÁ-ÿ.:-\s]{0,40}$/;
 
   function handlerInputChange(e) {
     e.preventDefault();
     setName(e.target.value);
+    if (!re.exec(e.target.value)) {
+      e.target.value.length > 40
+        ? setError("Invalid Length")
+        : setError("Invalid Characters");
+      setInputDisabled(true);
+    } else {
+      setError("");
+      setInputDisabled(false);
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(getNameGame(name));
-    setName("");
+    if (name) {
+      dispatch(getNameGame(name));
+      setError("");
+      setName("");
+      setInputDisabled(true);
+    } else {
+      setError("Empty field");
+    }
   }
 
   return (
@@ -29,7 +48,9 @@ export default function SearchBar() {
         value={name}
         onChange={(e) => handlerInputChange(e)}
       />
+      {error && <p className={s.error}>{error}</p>}
       <button
+        disabled={inputDisabled}
         className={s.button}
         type="submit"
         onClick={(e) => handleSubmit(e)}

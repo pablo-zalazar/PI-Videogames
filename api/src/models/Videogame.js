@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
     },
     platforms: {
       type: DataTypes.JSON,
-      allowNull: true,
+      allowNull: false,
     },
     createdInDb: {
       type: DataTypes.BOOLEAN,

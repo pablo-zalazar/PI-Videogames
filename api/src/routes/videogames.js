@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 const axios = require("axios");
-const { Videogame, Genre } = require("../db");
+const { Videogame, Genre, game_genre } = require("../db");
 
 const { APIKEY } = process.env;
 
@@ -78,7 +78,7 @@ const getApiGameId = async (id) => {
   );
   return {
     name: game.data.name,
-    description: game.data.description,
+    description: game.data.description_raw,
     image: game.data.background_image,
     released: game.data.released,
     rating: game.data.rating,
@@ -124,7 +124,7 @@ router.delete("/delete/:idgame", async (req, res) => {
     await Videogame.destroy({
       where: { id: idgame },
     });
-    res.status(200).send("Juego eliminado");
+    res.status(200).send("Game deleted");
   } catch (e) {
     console.log(e);
   }
@@ -136,17 +136,40 @@ router.put("/update", async (req, res) => {
     req.body;
 
   try {
-    await Videogame.update(
-      {
-        name,
-        description,
-        image,
-        released,
-        rating,
-        platforms,
-      },
-      { where: { id } }
-    );
+    await Videogame.destroy({
+      where: { id },
+    });
+
+    let gameCreated = await Videogame.create({
+      name,
+      description,
+      image,
+      released,
+      rating,
+      platforms,
+    });
+
+    // busca en el modelo genre todos los que coincidan con los pasados por body
+    let genreDb = await Genre.findAll({
+      where: { name: genres },
+    });
+
+    // addNombreModelo es un metodo de sequelize que trae del modelo (genre) lo que se le pasa
+    gameCreated.addGenre(genreDb);
+
+    res.status(200).send("Game Updated");
+
+    // await Videogame.update(
+    //   {
+    //     name,
+    //     description,
+    //     image,
+    //     released,
+    //     rating,
+    //     platforms,
+    //   },
+    //   { where: { id } }
+    // );
   } catch (e) {
     console.log(e);
   }

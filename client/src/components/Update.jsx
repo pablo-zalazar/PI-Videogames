@@ -9,26 +9,6 @@ import NavBar from "./NavBar";
 
 import s from "./GameCreate.module.css";
 
-function validate(input) {
-  let errors = {};
-  if (!input.name) {
-    errors.name = "Name is required";
-  }
-  if (!input.description) {
-    errors.description = "Description is required";
-  }
-  if (!input.platforms) {
-    errors.platforms = "Platforms is required";
-  }
-
-  return errors;
-}
-
-function disabledSubmit(errors) {
-  if (Object.keys(errors).length > 0) return true;
-  return false;
-}
-
 export default function GameCreate() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -36,10 +16,13 @@ export default function GameCreate() {
   const allGenres = useSelector((state) => state.genres);
   const myGame = useSelector((state) => state.detail);
 
-  const [errors, setErrors] = useState({});
-
   const [inputDisabled, setInputDisabled] = useState(true);
+  const [errors, setErrors] = useState({});
   const [ratingError, setRatingError] = useState("");
+  const [releasedError, setReleasedError] = useState("");
+
+  const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
+
   const [input, setInput] = useState({
     name: myGame.name,
     description: myGame.description,
@@ -52,11 +35,69 @@ export default function GameCreate() {
 
   useEffect(() => {
     dispatch(getGenres());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     setInputDisabled(disabledSubmit(errors));
   }, [errors]);
+
+  function validate(input) {
+    let errors = {};
+    if (!input.name) errors.name = "Name is required";
+    else if (!re.exec(input.name)) errors.name = "Invalid Characters";
+
+    if (!input.description) errors.description = "Description is required";
+    else if (!re.exec(input.description))
+      errors.description = "Invalid Characters";
+
+    if (!input.platforms) errors.platforms = "Platforms is required";
+    else if (!re.exec(input.platforms)) errors.platforms = "Invalid Characters";
+
+    return errors;
+  }
+
+  function validateRating() {
+    if (Number(input.rating) || input.rating === "") {
+      if (input.rating.length < 4) {
+        if (input.rating <= 5 && input.rating >= 0) {
+          if (input.rating[0] !== ".") {
+            setRatingError("");
+            return 1;
+          }
+        }
+      }
+    }
+    setRatingError("Invalid Value");
+    return 0;
+  }
+
+  function validateReleased() {
+    const date = input.released.split("-");
+    if (
+      date[0].length !== 4 ||
+      !Number(date[0]) ||
+      date[0] < 1900 ||
+      date[0] > 2100
+    ) {
+      setReleasedError("Invalid Date");
+      return 0;
+    }
+    if (!Number(date[1]) || date[1] < 1 || date[1] > 31) {
+      setReleasedError("Invalid Date");
+      return 0;
+    }
+    if (!Number(date[2]) || date[2] < 1 || date[2] > 12) {
+      setReleasedError("Invalid Date");
+      return 0;
+    }
+    setReleasedError("");
+    return 1;
+  }
+
+  function disabledSubmit(errors) {
+    if (Object.keys(errors).length > 0) return true;
+    return false;
+  }
 
   function handleChange(e) {
     e.preventDefault();
@@ -92,40 +133,33 @@ export default function GameCreate() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (Number(input.rating) || input.rating === "") {
-      if (input.rating.length < 4) {
-        if (input.rating <= 5 && input.rating >= 0) {
-          if (input.rating[0] !== ".") {
-            console.log(input);
-            dispatch(
-              updateGame({
-                ...input,
-                id: myGame.id,
-                platforms: input.platforms.split(" "),
-                rating: input.rating === "" ? 0 : input.rating,
-              })
-            );
-            alert("Game Created");
-            setInput({
-              name: "",
-              description: "",
-              image: "",
-              released: "2000-01-01",
-              rating: "",
-              platforms: "",
-              genres: [],
-            });
-            history.push("/videogames");
-          } else console.log("1");
-        } else console.log("2");
-      } else console.log("3");
-    } else console.log("4");
-    setRatingError("Invalid value");
+    const r = validateRating();
+    const d = validateReleased();
+    if (r && d) {
+      dispatch(
+        updateGame({
+          ...input,
+          platforms: input.platforms.split(" "),
+          rating: input.rating === "" ? 0 : input.rating,
+          id: myGame.id,
+        })
+      );
+      alert("Game Created");
+      setInput({
+        name: "",
+        description: "",
+        image: "",
+        released: "2000-01-01",
+        rating: "",
+        platforms: "",
+        genres: [],
+      });
+      history.push("/videogames");
+    }
   }
 
   return (
     <div>
-      {console.log(myGame)}
       <NavBar />
       <div className={s.main}>
         <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
@@ -170,6 +204,9 @@ export default function GameCreate() {
               name="released"
               onChange={(e) => handleChange(e)}
             />
+            {releasedError !== "" ? (
+              <span className={s.error}>{releasedError}</span>
+            ) : null}
           </div>
           <div>
             <p>Rating (0-5 two decimals) </p>

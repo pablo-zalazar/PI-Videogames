@@ -5,8 +5,8 @@
 }
 
 .App {
-  text-align: center;
-  background-image: url("./img/background.webp");
+  /* text-align: center; */
+  background-image: url("./img/fondo-gamers.jpg");
   background-size: cover;
 
   min-height: 100vh;

@@ -51,49 +51,57 @@ function rootReducer(state = initialState, action) {
         ...state,
         games: action.payload === "All" ? state.allGames : genreFilter,
       };
-    case "ORDER_BY_NAME":
-      let sortedName =
-        action.payload === "asc"
-          ? state.games.sort(function (a, b) {
-              if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-              if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-              return 0;
-            })
-          : state.games.sort(function (a, b) {
-              if (a.name.toLowerCase() > b.name.toLowerCase()) return -1;
-              if (a.name.toLowerCase() < b.name.toLowerCase()) return 1;
-              return 0;
-            });
-      return {
-        ...state,
-        games: sortedName,
-      };
-    case "ORDER_BY_RATING":
-      let sortedRating =
-        action.payload === "asc"
-          ? state.games.sort(function (a, b) {
-              if (a.rating > b.rating) return 1;
-              if (a.rating < b.rating) return -1;
-              return 0;
-            })
-          : state.games.sort(function (a, b) {
-              if (a.rating > b.rating) return -1;
-              if (a.rating < b.rating) return 1;
-              return 0;
-            });
-      return {
-        ...state,
-        games: sortedRating,
-      };
+    case "ORDER":
+      if (action.payload[0] === "name") {
+        const sortedGames =
+          action.payload[1] === "asc"
+            ? state.games.sort(function (a, b) {
+                if (a.name > b.name) return 1;
+                if (a.name < b.name) return -1;
+                return 0;
+              })
+            : state.games.sort(function (a, b) {
+                if (a.name > b.name) return -1;
+                if (a.name > b.name) return 1;
+                return 0;
+              });
+        return {
+          ...state,
+          games: sortedGames,
+        };
+      } else {
+        const sortedGames =
+          action.payload[1] === "asc"
+            ? state.games.sort(function (a, b) {
+                if (a.rating > b.rating) return 1;
+                if (a.rating < b.rating) return -1;
+                return 0;
+              })
+            : state.games.sort(function (a, b) {
+                if (a.rating > b.rating) return -1;
+                if (a.rating < b.rating) return 1;
+                return 0;
+              });
+        return {
+          ...state,
+          games: sortedGames,
+        };
+      }
     case "GET_DETAILS":
       return {
         ...state,
         detail: action.payload,
       };
+    case "RESET_DETAIL":
+      return {
+        ...state,
+        detail: [],
+      };
     case "POST_GAME":
       return {
         ...state,
       };
+
     default:
       return {
         ...state,

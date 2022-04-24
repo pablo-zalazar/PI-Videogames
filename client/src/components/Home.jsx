@@ -6,8 +6,7 @@ import {
   setCurrentPage,
   filterBySource,
   filterByGenre,
-  orderByName,
-  orderByRating,
+  order,
 } from "../actions";
 
 import Cards from "./Cards";
@@ -46,16 +45,16 @@ export default function Home() {
 
   function handleSortName(e) {
     e.preventDefault();
-    dispatch(orderByName(e.target.value));
+    dispatch(order(["name", e.target.value]));
     dispatch(setCurrentPage(1));
-    setOrden(`Ordenado nombre: ${e.target.value}`);
+    setOrden(`Order by name: ${e.target.value}`);
   }
 
   function handleSortRating(e) {
     e.preventDefault();
-    dispatch(orderByRating(e.target.value));
+    dispatch(order(["rating", e.target.value]));
     dispatch(setCurrentPage(1));
-    setOrden(`Ordenado rating: ${e.target.value}`);
+    setOrden(`Order by rating: ${e.target.value}`);
   }
 
   return (
@@ -63,34 +62,30 @@ export default function Home() {
       <NavBar />
       <div className={s.main}>
         <div className={s.order_filter_search}>
+          <div className={s.filter}>
+            <h2>FILTER</h2>
+            <div>
+              <p>Genre</p>
+              <select onChange={(e) => handleFilterGenre(e)}>
+                <option>All</option>
+                {allGenres?.map((g) => (
+                  <option value={g}>{g}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <p>Source</p>
+              <select onChange={(e) => handleFilterSource(e)} defaultValue="-">
+                <option disabled>-</option>
+                <option value="all">All</option>
+                <option value="api">API</option>
+                <option value="created">CREATED</option>
+              </select>
+            </div>
+          </div>
+
           <div className={s.order}>
             {/* <button onClick={(e) => handleClick(e)}>Reload</button> */}
-
-            <div className={s.filter}>
-              <h2>FILTER</h2>
-              <div>
-                <p>Genre</p>
-                <select onChange={(e) => handleFilterGenre(e)}>
-                  <option>All</option>
-                  {allGenres?.map((g) => (
-                    <option value={g}>{g}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <p>Source</p>
-                <select
-                  onChange={(e) => handleFilterSource(e)}
-                  defaultValue="-"
-                >
-                  <option disabled>-</option>
-                  <option value="all">All</option>
-                  <option value="api">API</option>
-                  <option value="created">CREATED</option>
-                </select>
-              </div>
-            </div>
-
             <h2>ORDER</h2>
             <div>
               <p>Order by name</p>
@@ -109,6 +104,7 @@ export default function Home() {
                 <option value="desc">Des</option>
               </select>
             </div>
+            {<p>{orden}</p>}
           </div>
 
           <div className={s.search}>

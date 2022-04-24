@@ -7,18 +7,26 @@
 
 .main div {
   height: 100vh;
-  background-color: #bfbfbf;
+  background-color: #999898;
+  /* background-color: #0059de; */
   padding-top: 100px;
-  opacity: 0.9;
+  opacity: 0.8;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   gap: 50px;
 }
 
 .main h1 {
+  text-align: center;
   position: relative;
   animation: left 1.5s linear;
+}
+
+.main a {
+  text-align: center;
+  width: max-content;
 }
 
 @keyframes left {
@@ -52,7 +60,7 @@
 
 .main button:hover {
   cursor: pointer;
-  background-color: #989898;
+  background-color: #7c7c7c;
 }
 
 @media (max-width: 1000px) {
