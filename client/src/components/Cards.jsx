@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import s from "./Cards.module.css";
@@ -8,7 +7,7 @@ import s from "./Cards.module.css";
 import Card from "./Card";
 import Paginado from "./Paginado";
 
-import { getGames, setCurrentPage } from "../actions";
+import { setCurrentPage } from "../actions";
 
 export default function Cards() {
   const allGames = useSelector((state) => state.games);
@@ -21,10 +20,6 @@ export default function Cards() {
   const currentGames = allGames.slice(firstGameIndex, lastGameIndex);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getGames());
-  }, [dispatch]);
 
   const paginado = (pageNumber) => {
     dispatch(setCurrentPage(pageNumber));
@@ -41,10 +36,10 @@ export default function Cards() {
             paginado={paginado}
           />
           <div className={s.list}>
-            {currentGames?.map((g) => {
+            {currentGames?.map((g, i) => {
               return (
-                <Link to={"/videogames/" + g.id}>
-                  <div key={g.id}>
+                <Link to={"/videogames/" + g.id} key={i}>
+                  <div>
                     <Card
                       name={g.name}
                       image={g.image}

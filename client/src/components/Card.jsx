@@ -11,7 +11,7 @@ export default function Card({ name, image, rating, genres }) {
       <p>
         <div>
           {rating}
-          <img src={star} />
+          <img src={star} alt="star" />
         </div>
       </p>
       <p>{genres.join(", ")}</p>

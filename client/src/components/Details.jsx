@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { getDetails, deleteGame, resetDetail } from "../actions";
+import { getDetails, deleteGame, resetDetail, setFirstMount } from "../actions";
 
 import NavBar from "./NavBar";
 
@@ -18,9 +18,10 @@ export default function Details(props) {
   const created = myGame.createdInDb ? true : false;
 
   useEffect(() => {
+    dispatch(setFirstMount(true));
     dispatch(getDetails(props.match.params.id));
     return dispatch(resetDetail());
-  }, [dispatch]);
+  }, [dispatch, props.match.params.id]);
 
   function handleDelete(e) {
     e.preventDefault();

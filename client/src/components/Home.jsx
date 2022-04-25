@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getGames,
   getGenres,
+  setFirstMount,
   getPlatforms,
   setCurrentPage,
-  filterBySource,
-  filterByGenre,
+  filterGames,
   order,
 } from "../actions";
 
@@ -20,26 +20,39 @@ import s from "./Home.module.css";
 export default function Home() {
   const dispatch = useDispatch();
 
+  const games = useSelector((state) => state.games);
+  const firstMount = useSelector((state) => state.firstMount);
   const allGenres = useSelector((state) => state.genres);
   const allPlatforms = useSelector((state) => state.platforms);
   const [orden, setOrden] = useState("");
+  const [filter, setFilter] = useState({
+    platform: "all",
+    genre: "all",
+    source: "all",
+  });
 
-  useEffect(async () => {
-    dispatch(getGenres());
-    await dispatch(getGames());
-    dispatch(getPlatforms());
-  }, []);
+  useEffect(() => {
+    async function func() {
+      if (firstMount) {
+        dispatch(setCurrentPage(1));
+        dispatch(setFirstMount(false));
+        dispatch(getGenres());
+        await dispatch(getGames());
+        dispatch(getPlatforms());
+      } else {
+        dispatch(filterGames(filter));
+        dispatch(setCurrentPage(1));
+      }
+    }
+    func();
+  }, [dispatch, filter]);
 
-  function handleFilterSource(e) {
+  function handleFilter(e) {
     e.preventDefault();
-    dispatch(filterBySource(e.target.value));
-    dispatch(setCurrentPage(1));
-  }
-
-  function handleFilterGenre(e) {
-    e.preventDefault();
-    dispatch(filterByGenre(e.target.value));
-    dispatch(setCurrentPage(1));
+    setFilter({
+      ...filter,
+      [e.target.name]: e.target.value,
+    });
   }
 
   function handleSortName(e) {
@@ -64,28 +77,44 @@ export default function Home() {
           <div className={s.filter}>
             <h2>FILTER</h2>
             <div>
-              <p>Genre</p>
-              <select onChange={(e) => handleFilterGenre(e)}>
-                <option value="all">All</option>
-                {allGenres?.map((g) => (
-                  <option value={g}>{g}</option>
-                ))}
-              </select>
-            </div>
-            <div>
               <p>Platforms</p>
-              <select onChange={(e) => handleFilterSource(e)} defaultValue="-">
-                <option disabled>-</option>
+              <select
+                onChange={(e) => handleFilter(e)}
+                name="platform"
+                disabled={games.length === 0 ? true : false}
+              >
                 <option value="all">All</option>
-                {allPlatforms?.map((p) => (
-                  <option value={p}>{p}</option>
+                {allPlatforms?.map((p, i) => (
+                  <option value={p} key={i}>
+                    {p}
+                  </option>
                 ))}
               </select>
             </div>
+
+            <div>
+              <p>Genre</p>
+              <select
+                onChange={(e) => handleFilter(e)}
+                name="genre"
+                disabled={games.length === 0 ? true : false}
+              >
+                <option value="all">All</option>
+                {allGenres?.map((g, i) => (
+                  <option value={g} key={i}>
+                    {g}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <p>Source</p>
-              <select onChange={(e) => handleFilterSource(e)} defaultValue="-">
-                <option disabled>-</option>
+              <select
+                onChange={(e) => handleFilter(e)}
+                name="source"
+                disabled={games.length === 0 ? true : false}
+              >
                 <option value="all">All</option>
                 <option value="api">API</option>
                 <option value="created">CREATED</option>
@@ -97,7 +126,11 @@ export default function Home() {
             <h2>ORDER</h2>
             <div>
               <p>Order by name</p>
-              <select onChange={(e) => handleSortName(e)} defaultValue="-">
+              <select
+                onChange={(e) => handleSortName(e)}
+                defaultValue="-"
+                disabled={games.length === 0 ? true : false}
+              >
                 <option disabled>-</option>
                 <option value="asc">A-Z</option>
                 <option value="desc">Z-A</option>
@@ -106,7 +139,11 @@ export default function Home() {
 
             <div>
               <p>Order by rating</p>
-              <select onChange={(e) => handleSortRating(e)} defaultValue="-">
+              <select
+                onChange={(e) => handleSortRating(e)}
+                defaultValue="-"
+                disabled={games.length === 0 ? true : false}
+              >
                 <option disabled>-</option>
                 <option value="asc">Asc</option>
                 <option value="desc">Des</option>

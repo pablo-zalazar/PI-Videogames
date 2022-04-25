@@ -8,10 +8,15 @@
 }
 
 .paginado p,
-.paginado a {
+.paginado button {
   padding: 5px;
   cursor: pointer;
   font-weight: 400;
+}
+
+.paginado button {
+  background-color: transparent;
+  border: none;
 }
 
 .paginado > li:hover {

@@ -27,14 +27,17 @@ export default function Paginado({ gamesPerPage, allGames, paginado }) {
             </p>
           ) : null}
           {pageNumbers &&
-            pageNumbers.map((number) => (
-              <li className="number" key={number}>
+            pageNumbers.map((number, i) => (
+              <li className="number" key={i}>
                 {number === currentPage ? (
-                  <a onClick={() => paginado(number)} className={s.current}>
+                  <button
+                    onClick={() => paginado(number)}
+                    className={s.current}
+                  >
                     {number}
-                  </a>
+                  </button>
                 ) : (
-                  <a onClick={() => paginado(number)}>{number}</a>
+                  <button onClick={() => paginado(number)}>{number}</button>
                 )}
               </li>
             ))}

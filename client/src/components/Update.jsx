@@ -37,18 +37,13 @@ export default function GameCreate() {
     genres: myGame.genres,
   });
 
-  const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
-
   useEffect(() => {
     dispatch(getGenres());
     dispatch(getPlatforms());
   }, [dispatch]);
 
   useEffect(() => {
-    validate();
-  }, [input.name, input.description, input.platforms]);
-
-  function validate() {
+    const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
     let errors = {};
     if (!input.name) errors.name = "Name is required";
     else if (!re.exec(input.name)) errors.name = "Invalid Characters";
@@ -68,7 +63,29 @@ export default function GameCreate() {
       : setInputDisabled(true);
 
     setErrors(errors);
-  }
+  }, [input.name, input.description, input.platforms]);
+
+  // function validate() {
+  //   let errors = {};
+  //   if (!input.name) errors.name = "Name is required";
+  //   else if (!re.exec(input.name)) errors.name = "Invalid Characters";
+  //   else errors.name = "";
+
+  //   if (!input.description) errors.description = "Description is required";
+  //   else if (!re.exec(input.description))
+  //     errors.description = "Invalid Characters";
+  //   else errors.description = "";
+
+  //   if (input.platforms.length === 0)
+  //     errors.platforms = "Platforms is required";
+  //   else errors.platforms = "";
+
+  //   errors.name === "" && errors.description === "" && errors.platforms === ""
+  //     ? setInputDisabled(false)
+  //     : setInputDisabled(true);
+
+  //   setErrors(errors);
+  // }
 
   function validateRating() {
     if (Number(input.rating) || input.rating === "") {
@@ -96,11 +113,11 @@ export default function GameCreate() {
       setReleasedError("Invalid Date");
       return 0;
     }
-    if (!Number(date[1]) || date[1] < 1 || date[1] > 31) {
+    if (!Number(date[1]) || date[1] < 1 || date[1] > 12) {
       setReleasedError("Invalid Date");
       return 0;
     }
-    if (!Number(date[2]) || date[2] < 1 || date[2] > 12) {
+    if (!Number(date[2]) || date[2] < 1 || date[2] > 31) {
       setReleasedError("Invalid Date");
       return 0;
     }
@@ -160,6 +177,7 @@ export default function GameCreate() {
       dispatch(
         updateGame({
           ...input,
+          name: input.name.charAt(0).toUpperCase() + input.name.slice(1),
           rating: input.rating === "" ? 0 : input.rating,
         })
       );

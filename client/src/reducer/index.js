@@ -5,6 +5,7 @@ let initialState = {
   allGames: [],
   detail: [],
   currentPage: 1,
+  firstMount: true,
 };
 
 function rootReducer(state = initialState, action) {
@@ -20,18 +21,31 @@ function rootReducer(state = initialState, action) {
         games: action.payload,
         allGames: action.payload,
       };
-    case "GET_PLATFORMS":
-      const platforms = [];
-      state.allGames.forEach((game) =>
-        game.platforms.forEach((p) =>
-          !platforms.includes(p) ? platforms.push(p) : null
-        )
-      );
-      // console.log(platforms);
+    case "SET_FIRST_MOUNT":
       return {
         ...state,
-        platforms,
+        games: [],
+        allGames: [],
+        firstMount: action.payload,
       };
+    case "GET_PLATFORMS":
+      if (state.platforms.length === 0) {
+        const platforms = [];
+        state.allGames.forEach((game) =>
+          game.platforms.forEach((p) =>
+            !platforms.includes(p) ? platforms.push(p) : null
+          )
+        );
+        return {
+          ...state,
+          platforms,
+        };
+      }
+      return {
+        ...state,
+      };
+    // console.log(platforms);
+
     case "SET_CURRENT_PAGE":
       return {
         ...state,
@@ -42,27 +56,36 @@ function rootReducer(state = initialState, action) {
         ...state,
         games: action.payload,
       };
-    case "GET_GAMES_SOURCE":
-      let sourceFilter =
-        action.payload === "api"
-          ? state.allGames.filter((g) => !g.createdInDb)
-          : state.allGames.filter((g) => g.createdInDb);
-      sourceFilter =
-        Object.keys(sourceFilter).length === 0 ? ["empty"] : sourceFilter;
+    case "FILTER_GAMES":
+      let filterGames = state.allGames;
+      // console.log(action.payload[0]);
+      // console.log(action.payload[1]);
+      // console.log(action.payload[2]);
+      // console.log(filterGames);
+      filterGames =
+        action.payload.platform !== "all"
+          ? filterGames.filter((game) =>
+              game.platforms.includes(action.payload.platform)
+            )
+          : filterGames;
+      // console.log(filterGames);
+      filterGames =
+        action.payload.genre !== "all"
+          ? filterGames.filter((game) =>
+              game.genres.includes(action.payload.genre)
+            )
+          : filterGames;
+      // console.log(filterGames);
+      filterGames =
+        action.payload.source === "all"
+          ? filterGames
+          : action.payload.source === "api"
+          ? filterGames.filter((g) => !g.createdInDb)
+          : filterGames.filter((g) => g.createdInDb);
+
       return {
         ...state,
-        games: action.payload === "all" ? state.allGames : sourceFilter,
-      };
-    case "GET_GAMES_GENRE":
-      let genreFilter = state.allGames.filter((g) =>
-        g.genres.includes(action.payload)
-      );
-      // console.log(genreFilter);
-      genreFilter =
-        Object.keys(genreFilter).length === 0 ? ["empty"] : genreFilter;
-      return {
-        ...state,
-        games: action.payload === "all" ? state.allGames : genreFilter,
+        games: filterGames.length === 0 ? ["empty"] : filterGames,
       };
     case "ORDER":
       if (action.payload[0] === "name") {
