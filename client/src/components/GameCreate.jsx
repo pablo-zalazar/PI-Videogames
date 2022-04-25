@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { postGame, getGenres } from "../actions/index";
+import { postGame, getGenres, getPlatforms } from "../actions/index";
 
 import NavBar from "./NavBar";
 
@@ -12,6 +12,7 @@ import s from "./GameCreate.module.css";
 export default function GameCreate() {
   const dispatch = useDispatch();
   const allGenres = useSelector((state) => state.genres);
+  const allPlatforms = useSelector((state) => state.platforms);
   const history = useHistory();
 
   const [errors, setErrors] = useState({
@@ -30,7 +31,7 @@ export default function GameCreate() {
     image: "",
     released: "2000-01-01",
     rating: "",
-    platforms: "",
+    platforms: [],
     genres: [],
   });
 
@@ -38,25 +39,33 @@ export default function GameCreate() {
 
   useEffect(() => {
     dispatch(getGenres());
+    dispatch(getPlatforms());
   }, []);
 
   useEffect(() => {
-    setInputDisabled(disabledSubmit(errors));
-  }, [errors]);
+    validate();
+  }, [input.name, input.description, input.platforms]);
 
-  function validate(input) {
+  function validate() {
     let errors = {};
     if (!input.name) errors.name = "Name is required";
     else if (!re.exec(input.name)) errors.name = "Invalid Characters";
+    else errors.name = "";
 
     if (!input.description) errors.description = "Description is required";
     else if (!re.exec(input.description))
       errors.description = "Invalid Characters";
+    else errors.description = "";
 
-    if (!input.platforms) errors.platforms = "Platforms is required";
-    else if (!re.exec(input.platforms)) errors.platforms = "Invalid Characters";
+    if (input.platforms.length === 0)
+      errors.platforms = "Platforms is required";
+    else errors.platforms = "";
 
-    return errors;
+    errors.name === "" && errors.description === "" && errors.platforms === ""
+      ? setInputDisabled(false)
+      : setInputDisabled(true);
+
+    setErrors(errors);
   }
 
   function validateRating() {
@@ -97,26 +106,33 @@ export default function GameCreate() {
     return 1;
   }
 
-  function disabledSubmit(errors) {
-    if (Object.keys(errors).length > 0) return true;
-    return false;
-  }
-
   function handleChange(e) {
     e.preventDefault();
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
-    setErrors(
-      validate({
-        ...input,
-        [e.target.name]: e.target.value,
-      })
-    );
   }
 
-  function handleSelect(e) {
+  function handleSelectPlatform(e) {
+    e.preventDefault();
+    if (input.platforms.indexOf(e.target.value) === -1) {
+      setInput({
+        ...input,
+        platforms: [...input.platforms, e.target.value],
+      });
+    }
+  }
+
+  function handleDeletePlatform(e) {
+    e.preventDefault();
+    setInput({
+      ...input,
+      platforms: input.platforms.filter((g) => g !== e.target.name),
+    });
+  }
+
+  function handleSelectGenre(e) {
     e.preventDefault();
     if (input.genres.indexOf(e.target.value) === -1) {
       setInput({
@@ -126,10 +142,11 @@ export default function GameCreate() {
     }
   }
 
-  function handleDelete(el) {
+  function handleDeleteGenre(e) {
+    e.preventDefault();
     setInput({
       ...input,
-      genres: input.genres.filter((g) => g !== el.target.name),
+      genres: input.genres.filter((g) => g !== e.target.name),
     });
   }
 
@@ -141,7 +158,6 @@ export default function GameCreate() {
       dispatch(
         postGame({
           ...input,
-          platforms: input.platforms.split(" "),
           rating: input.rating === "" ? 0 : input.rating,
         })
       );
@@ -152,7 +168,7 @@ export default function GameCreate() {
         image: "",
         released: "2000-01-01",
         rating: "",
-        platforms: "",
+        platforms: [],
         genres: [],
       });
       history.push("/videogames");
@@ -222,23 +238,40 @@ export default function GameCreate() {
             ) : null}
           </div>
           <div>
-            <p>Platforms (ps4 ps5 etc) </p>
-            <input
-              type="text"
-              value={input.platforms}
-              name="platforms"
-              onChange={(e) => handleChange(e)}
-            />
+            <p>Platforms </p>
+            <select onChange={(e) => handleSelectPlatform(e)}>
+              <option selected disabled hidden>
+                select genres
+              </option>
+              {allPlatforms?.map((g) => (
+                <option value={g}>{g}</option>
+              ))}
+            </select>
             {errors.platforms && (
               <span className={s.error}>{errors.platforms}</span>
             )}
           </div>
+
+          <ul>
+            {input.platforms.map((g) => (
+              <li>
+                <button
+                  type="button"
+                  name={g}
+                  onClick={(g) => handleDeletePlatform(g)}
+                >
+                  X
+                </button>
+                <p>{g}</p>
+              </li>
+            ))}
+          </ul>
+
           <div>
             <p>Genres </p>
-            <select onChange={(e) => handleSelect(e)}>
+            <select onChange={(e) => handleSelectGenre(e)}>
               <option selected disabled hidden>
-                {" "}
-                select genres{" "}
+                select genres
               </option>
               {allGenres?.map((g) => (
                 <option value={g}>{g}</option>
@@ -249,10 +282,14 @@ export default function GameCreate() {
           <ul>
             {input.genres.map((g) => (
               <li>
-                <p>{g}</p>
-                <button type="button" name={g} onClick={(g) => handleDelete(g)}>
+                <button
+                  type="button"
+                  name={g}
+                  onClick={(g) => handleDeleteGenre(g)}
+                >
                   X
                 </button>
+                <p>{g}</p>
               </li>
             ))}
           </ul>

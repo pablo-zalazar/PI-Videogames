@@ -135,6 +135,7 @@ router.put("/update", async (req, res) => {
   const { id, name, description, image, released, rating, platforms, genres } =
     req.body;
 
+  console.log(req.body);
   try {
     await Videogame.destroy({
       where: { id },

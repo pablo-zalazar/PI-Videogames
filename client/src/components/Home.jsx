@@ -2,7 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getGames,
   getGenres,
+  getPlatforms,
   setCurrentPage,
   filterBySource,
   filterByGenre,
@@ -19,17 +21,14 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const allGenres = useSelector((state) => state.genres);
-
+  const allPlatforms = useSelector((state) => state.platforms);
   const [orden, setOrden] = useState("");
 
-  useEffect(() => {
+  useEffect(async () => {
     dispatch(getGenres());
+    await dispatch(getGames());
+    dispatch(getPlatforms());
   }, []);
-
-  // function handleClick(e) {
-  //   e.preventDefault();
-  //   dispatch(getGames());
-  // }
 
   function handleFilterSource(e) {
     e.preventDefault();
@@ -67,9 +66,19 @@ export default function Home() {
             <div>
               <p>Genre</p>
               <select onChange={(e) => handleFilterGenre(e)}>
-                <option>All</option>
+                <option value="all">All</option>
                 {allGenres?.map((g) => (
                   <option value={g}>{g}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <p>Platforms</p>
+              <select onChange={(e) => handleFilterSource(e)} defaultValue="-">
+                <option disabled>-</option>
+                <option value="all">All</option>
+                {allPlatforms?.map((p) => (
+                  <option value={p}>{p}</option>
                 ))}
               </select>
             </div>
@@ -85,7 +94,6 @@ export default function Home() {
           </div>
 
           <div className={s.order}>
-            {/* <button onClick={(e) => handleClick(e)}>Reload</button> */}
             <h2>ORDER</h2>
             <div>
               <p>Order by name</p>

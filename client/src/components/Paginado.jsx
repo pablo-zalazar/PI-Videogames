@@ -8,6 +8,7 @@ export default function Paginado({ gamesPerPage, allGames, paginado }) {
   const pageNumbers = [];
 
   const currentPage = useSelector((state) => state.currentPage);
+
   for (let i = 1; i <= pages; i++) {
     pageNumbers.push(i);
   }

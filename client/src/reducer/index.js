@@ -1,5 +1,6 @@
 let initialState = {
   genres: [],
+  platforms: [],
   games: [],
   allGames: [],
   detail: [],
@@ -18,6 +19,18 @@ function rootReducer(state = initialState, action) {
         ...state,
         games: action.payload,
         allGames: action.payload,
+      };
+    case "GET_PLATFORMS":
+      const platforms = [];
+      state.allGames.forEach((game) =>
+        game.platforms.forEach((p) =>
+          !platforms.includes(p) ? platforms.push(p) : null
+        )
+      );
+      // console.log(platforms);
+      return {
+        ...state,
+        platforms,
       };
     case "SET_CURRENT_PAGE":
       return {
@@ -49,7 +62,7 @@ function rootReducer(state = initialState, action) {
         Object.keys(genreFilter).length === 0 ? ["empty"] : genreFilter;
       return {
         ...state,
-        games: action.payload === "All" ? state.allGames : genreFilter,
+        games: action.payload === "all" ? state.allGames : genreFilter,
       };
     case "ORDER":
       if (action.payload[0] === "name") {

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getGenres, updateGame } from "../actions/index";
+import { getGenres, updateGame, getPlatforms } from "../actions/index";
 
 import NavBar from "./NavBar";
 
@@ -11,49 +11,63 @@ import s from "./GameCreate.module.css";
 
 export default function GameCreate() {
   const dispatch = useDispatch();
+  const allGenres = useSelector((state) => state.genres);
+  const allPlatforms = useSelector((state) => state.platforms);
+  const myGame = useSelector((state) => state.detail);
   const history = useHistory();
 
-  const allGenres = useSelector((state) => state.genres);
-  const myGame = useSelector((state) => state.detail);
+  const [errors, setErrors] = useState({
+    name: "Name is required",
+    description: "Description is required",
+    platforms: "Platforms are required",
+  });
 
   const [inputDisabled, setInputDisabled] = useState(true);
-  const [errors, setErrors] = useState({});
   const [ratingError, setRatingError] = useState("");
   const [releasedError, setReleasedError] = useState("");
 
-  const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
-
   const [input, setInput] = useState({
+    id: myGame.id,
     name: myGame.name,
     description: myGame.description,
     image: myGame.image,
     released: myGame.released,
-    rating: myGame.rating.toString(),
-    platforms: myGame.platforms.join(" "),
+    rating: myGame.rating,
+    platforms: myGame.platforms,
     genres: myGame.genres,
   });
 
+  const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
+
   useEffect(() => {
     dispatch(getGenres());
+    dispatch(getPlatforms());
   }, [dispatch]);
 
   useEffect(() => {
-    setInputDisabled(disabledSubmit(errors));
-  }, [errors]);
+    validate();
+  }, [input.name, input.description, input.platforms]);
 
-  function validate(input) {
+  function validate() {
     let errors = {};
     if (!input.name) errors.name = "Name is required";
     else if (!re.exec(input.name)) errors.name = "Invalid Characters";
+    else errors.name = "";
 
     if (!input.description) errors.description = "Description is required";
     else if (!re.exec(input.description))
       errors.description = "Invalid Characters";
+    else errors.description = "";
 
-    if (!input.platforms) errors.platforms = "Platforms is required";
-    else if (!re.exec(input.platforms)) errors.platforms = "Invalid Characters";
+    if (input.platforms.length === 0)
+      errors.platforms = "Platforms is required";
+    else errors.platforms = "";
 
-    return errors;
+    errors.name === "" && errors.description === "" && errors.platforms === ""
+      ? setInputDisabled(false)
+      : setInputDisabled(true);
+
+    setErrors(errors);
   }
 
   function validateRating() {
@@ -94,27 +108,33 @@ export default function GameCreate() {
     return 1;
   }
 
-  function disabledSubmit(errors) {
-    if (Object.keys(errors).length > 0) return true;
-    return false;
-  }
-
   function handleChange(e) {
     e.preventDefault();
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
-    setErrors(
-      validate({
-        ...input,
-        [e.target.name]: e.target.value,
-      })
-    );
-    // console.log(errors);
   }
 
-  function handleSelect(e) {
+  function handleSelectPlatform(e) {
+    e.preventDefault();
+    if (input.platforms.indexOf(e.target.value) === -1) {
+      setInput({
+        ...input,
+        platforms: [...input.platforms, e.target.value],
+      });
+    }
+  }
+
+  function handleDeletePlatform(e) {
+    e.preventDefault();
+    setInput({
+      ...input,
+      platforms: input.platforms.filter((g) => g !== e.target.name),
+    });
+  }
+
+  function handleSelectGenre(e) {
     e.preventDefault();
     if (input.genres.indexOf(e.target.value) === -1) {
       setInput({
@@ -124,10 +144,11 @@ export default function GameCreate() {
     }
   }
 
-  function handleDelete(el) {
+  function handleDeleteGenre(e) {
+    e.preventDefault();
     setInput({
       ...input,
-      genres: input.genres.filter((g) => g !== el.target.name),
+      genres: input.genres.filter((g) => g !== e.target.name),
     });
   }
 
@@ -139,19 +160,17 @@ export default function GameCreate() {
       dispatch(
         updateGame({
           ...input,
-          platforms: input.platforms.split(" "),
           rating: input.rating === "" ? 0 : input.rating,
-          id: myGame.id,
         })
       );
-      alert("Game Created");
+      alert("Game Updated");
       setInput({
         name: "",
         description: "",
         image: "",
         released: "2000-01-01",
         rating: "",
-        platforms: "",
+        platforms: [],
         genres: [],
       });
       history.push("/videogames");
@@ -163,7 +182,7 @@ export default function GameCreate() {
       <NavBar />
       <div className={s.main}>
         <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
-          <h1>Create Update</h1>
+          <h1>Create Game</h1>
           <div>
             <p>Name </p>
             <input
@@ -221,23 +240,40 @@ export default function GameCreate() {
             ) : null}
           </div>
           <div>
-            <p>Platforms (ps4 ps5 etc) </p>
-            <input
-              type="text"
-              value={input.platforms}
-              name="platforms"
-              onChange={(e) => handleChange(e)}
-            />
+            <p>Platforms </p>
+            <select onChange={(e) => handleSelectPlatform(e)}>
+              <option selected disabled hidden>
+                select genres
+              </option>
+              {allPlatforms?.map((g) => (
+                <option value={g}>{g}</option>
+              ))}
+            </select>
             {errors.platforms && (
               <span className={s.error}>{errors.platforms}</span>
             )}
           </div>
+
+          <ul>
+            {input.platforms.map((g) => (
+              <li>
+                <button
+                  type="button"
+                  name={g}
+                  onClick={(g) => handleDeletePlatform(g)}
+                >
+                  X
+                </button>
+                <p>{g}</p>
+              </li>
+            ))}
+          </ul>
+
           <div>
             <p>Genres </p>
-            <select onChange={(e) => handleSelect(e)}>
+            <select onChange={(e) => handleSelectGenre(e)}>
               <option selected disabled hidden>
-                {" "}
-                select genres{" "}
+                select genres
               </option>
               {allGenres?.map((g) => (
                 <option value={g}>{g}</option>
@@ -248,10 +284,14 @@ export default function GameCreate() {
           <ul>
             {input.genres.map((g) => (
               <li>
-                <p>{g}</p>
-                <button type="button" name={g} onClick={(g) => handleDelete(g)}>
+                <button
+                  type="button"
+                  name={g}
+                  onClick={(g) => handleDeleteGenre(g)}
+                >
                   X
                 </button>
+                <p>{g}</p>
               </li>
             ))}
           </ul>

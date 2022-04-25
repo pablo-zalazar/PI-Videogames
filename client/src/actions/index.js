@@ -3,6 +3,7 @@ import axios from "axios";
 export function getGenres() {
   return async function (dispatch) {
     try {
+      console.log("a");
       let json = await axios.get("http://localhost:3001/genres");
       return dispatch({
         type: "GET_GENRES",
@@ -17,6 +18,7 @@ export function getGenres() {
 export function getGames() {
   return async function (dispatch) {
     try {
+      console.log("b");
       let json = await axios.get("http://localhost:3001/videogames");
       return dispatch({
         type: "GET_GAMES",
@@ -25,6 +27,13 @@ export function getGames() {
     } catch (e) {
       console.log(e);
     }
+  };
+}
+
+export function getPlatforms() {
+  console.log("c");
+  return {
+    type: "GET_PLATFORMS",
   };
 }
 
