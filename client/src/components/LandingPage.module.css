@@ -23,6 +23,10 @@
   animation: left 1.5s linear;
 }
 
+.main h1:nth-of-type(even) {
+  color: red;
+}
+
 .main a {
   text-align: center;
   width: max-content;

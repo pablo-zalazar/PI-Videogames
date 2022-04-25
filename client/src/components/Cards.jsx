@@ -45,7 +45,6 @@ export default function Cards() {
                       image={g.image}
                       rating={g.rating}
                       genres={g.genres}
-                      key={g.id}
                     />
                   </div>
                 </Link>

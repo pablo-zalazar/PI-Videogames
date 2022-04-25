@@ -21,6 +21,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const games = useSelector((state) => state.games);
+  const allGames = useSelector((state) => state.allGames);
   const firstMount = useSelector((state) => state.firstMount);
   const allGenres = useSelector((state) => state.genres);
   const allPlatforms = useSelector((state) => state.platforms);
@@ -37,7 +38,7 @@ export default function Home() {
         dispatch(setCurrentPage(1));
         dispatch(setFirstMount(false));
         dispatch(getGenres());
-        await dispatch(getGames());
+        await dispatch(getGames(allGames));
         dispatch(getPlatforms());
       } else {
         dispatch(filterGames(filter));

@@ -17,7 +17,7 @@ export function getGenres() {
 export function getGames() {
   return async function (dispatch) {
     try {
-      let json = await axios.get("http://localhost:3001/videogames");
+      const json = await axios.get("http://localhost:3001/videogames");
       return dispatch({
         type: "GET_GAMES",
         payload: json.data,
@@ -66,8 +66,7 @@ export function getNameGame(payload) {
   return function (dispatch) {
     axios
       .get("http://localhost:3001/videogames?name=" + payload)
-      .then((json) => json.data)
-      .then((json) => dispatch({ type: "GET_NAME_GAMES", payload: json }))
+      .then((json) => dispatch({ type: "GET_NAME_GAMES", payload: json.data }))
       .catch((e) =>
         dispatch({
           type: "GET_NAME_GAMES",

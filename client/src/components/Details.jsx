@@ -52,8 +52,8 @@ export default function Details(props) {
             <fieldset className={s.platforms}>
               <legend>platforms</legend>
               <ul>
-                {myGame.platforms.map((g) => (
-                  <li>-{g}</li>
+                {myGame.platforms.map((g, i) => (
+                  <li key={i}>-{g}</li>
                 ))}
               </ul>
             </fieldset>
@@ -61,8 +61,8 @@ export default function Details(props) {
             <fieldset className={s.genres}>
               <legend>Genres</legend>
               <ul>
-                {myGame.genres.map((g) => (
-                  <li>-{g}</li>
+                {myGame.genres.map((g, i) => (
+                  <li key={i}>-{g}</li>
                 ))}
               </ul>
             </fieldset>

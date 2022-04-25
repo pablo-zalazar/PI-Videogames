@@ -32,7 +32,7 @@ export default function GameCreate() {
     description: myGame.description,
     image: myGame.image,
     released: myGame.released,
-    rating: myGame.rating,
+    rating: myGame.rating.toString(),
     platforms: myGame.platforms,
     genres: myGame.genres,
   });
@@ -43,16 +43,22 @@ export default function GameCreate() {
   }, [dispatch]);
 
   useEffect(() => {
-    const re = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
+    const rename = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
+    const redescription = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,300}$/;
     let errors = {};
     if (!input.name) errors.name = "Name is required";
-    else if (!re.exec(input.name)) errors.name = "Invalid Characters";
-    else errors.name = "";
+    else if (!rename.exec(input.name)) {
+      input.name.length > 40
+        ? (errors.name = "Invalid Length")
+        : (errors.name = "Invalid Characters");
+    } else errors.name = "";
 
     if (!input.description) errors.description = "Description is required";
-    else if (!re.exec(input.description))
-      errors.description = "Invalid Characters";
-    else errors.description = "";
+    else if (!redescription.exec(input.description)) {
+      input.description.length > 300
+        ? (errors.description = "Invalid Length")
+        : (errors.description = "Invalid Characters");
+    } else errors.description = "";
 
     if (input.platforms.length === 0)
       errors.platforms = "Platforms is required";
@@ -89,7 +95,7 @@ export default function GameCreate() {
 
   function validateRating() {
     if (Number(input.rating) || input.rating === "") {
-      if (input.rating.length < 4) {
+      if (input.rating.length <= 4) {
         if (input.rating <= 5 && input.rating >= 0) {
           if (input.rating[0] !== ".") {
             setRatingError("");
@@ -104,6 +110,7 @@ export default function GameCreate() {
 
   function validateReleased() {
     const date = input.released.split("-");
+    console.log(date);
     if (
       date[0].length !== 4 ||
       !Number(date[0]) ||
@@ -111,14 +118,17 @@ export default function GameCreate() {
       date[0] > 2100
     ) {
       setReleasedError("Invalid Date");
+      console.log("a");
       return 0;
     }
     if (!Number(date[1]) || date[1] < 1 || date[1] > 12) {
       setReleasedError("Invalid Date");
+      console.log("b");
       return 0;
     }
     if (!Number(date[2]) || date[2] < 1 || date[2] > 31) {
       setReleasedError("Invalid Date");
+      console.log("c");
       return 0;
     }
     setReleasedError("");
@@ -200,9 +210,9 @@ export default function GameCreate() {
       <NavBar />
       <div className={s.main}>
         <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
-          <h1>Create Game</h1>
+          <h1>Update Game</h1>
           <div>
-            <p>Name </p>
+            <p>Name (max 40 characters)</p>
             <input
               type="text"
               value={input.name}
@@ -212,7 +222,7 @@ export default function GameCreate() {
             {errors.name && <span className={s.error}>{errors.name}</span>}
           </div>
           <div>
-            <p>Description </p>
+            <p>Description (max 300 characters)</p>
             <textarea
               value={input.description}
               name="description"
@@ -263,8 +273,10 @@ export default function GameCreate() {
               <option selected disabled hidden>
                 select genres
               </option>
-              {allPlatforms?.map((g) => (
-                <option value={g}>{g}</option>
+              {allPlatforms?.map((g, i) => (
+                <option key={i} value={g}>
+                  {g}
+                </option>
               ))}
             </select>
             {errors.platforms && (
@@ -273,8 +285,8 @@ export default function GameCreate() {
           </div>
 
           <ul>
-            {input.platforms.map((g) => (
-              <li>
+            {input.platforms.map((g, i) => (
+              <li key={i}>
                 <button
                   type="button"
                   name={g}
@@ -293,15 +305,17 @@ export default function GameCreate() {
               <option selected disabled hidden>
                 select genres
               </option>
-              {allGenres?.map((g) => (
-                <option value={g}>{g}</option>
+              {allGenres?.map((g, i) => (
+                <option key={i} value={g}>
+                  {g}
+                </option>
               ))}
             </select>
           </div>
 
           <ul>
-            {input.genres.map((g) => (
-              <li>
+            {input.genres.map((g, i) => (
+              <li key={i}>
                 <button
                   type="button"
                   name={g}

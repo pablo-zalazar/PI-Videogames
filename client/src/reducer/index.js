@@ -25,7 +25,6 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         games: [],
-        allGames: [],
         firstMount: action.payload,
       };
     case "GET_PLATFORMS":

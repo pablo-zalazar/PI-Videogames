@@ -106,6 +106,7 @@ router.get("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   let games = await getAllGames();
   const name = req.query.name;
+
   if (name) {
     games = await games.filter((e) =>
       e.name.toLowerCase().includes(name.toLowerCase())
