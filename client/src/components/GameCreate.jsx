@@ -98,7 +98,6 @@ export default function GameCreate() {
   // }
 
   function validateRating() {
-    console.log(input.rating.length);
     if (Number(input.rating) || input.rating === "") {
       if (input.rating.length <= 4) {
         if (input.rating <= 5 && input.rating >= 0) {
@@ -115,7 +114,6 @@ export default function GameCreate() {
 
   function validateReleased() {
     const date = input.released.split("-");
-    console.log(date);
     if (
       date[0].length !== 4 ||
       !Number(date[0]) ||

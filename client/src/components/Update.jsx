@@ -110,7 +110,6 @@ export default function GameCreate() {
 
   function validateReleased() {
     const date = input.released.split("-");
-    console.log(date);
     if (
       date[0].length !== 4 ||
       !Number(date[0]) ||
@@ -118,7 +117,6 @@ export default function GameCreate() {
       date[0] > 2100
     ) {
       setReleasedError("Invalid Date");
-      console.log("a");
       return 0;
     }
     if (!Number(date[1]) || date[1] < 1 || date[1] > 12) {

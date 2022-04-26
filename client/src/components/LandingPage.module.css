@@ -1,26 +1,25 @@
 .main {
-  height: 100%;
-  width: 80vw;
-  margin: auto;
-  padding-top: 70px;
+  background-image: url("../img/landingback.webp");
+  background-size: cover;
+  height: 100vh;
 }
 
 .main div {
   height: 100vh;
-  background-color: #999898;
-  padding-top: 100px;
   opacity: 0.8;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  padding: 150px 0;
   gap: 50px;
 }
 
 .main h1 {
   text-align: center;
   position: relative;
-  animation: left 1.5s linear;
+  color: #da3971;
+  animation: title 2s linear infinite;
 }
 
 .main h1:nth-of-type(even) {
@@ -32,48 +31,63 @@
   width: max-content;
 }
 
-@keyframes left {
+@keyframes title {
   0% {
-    left: -1000px;
+    color: #3996d9;
+    font-size: 48px;
+  }
+  25% {
+    color: #e83447;
+  }
+  50% {
+    color: #dd56d7;
+    font-size: 56px;
+  }
+  75% {
+    color: #f5812d;
   }
   100% {
-    left: 0px;
+    color: #3996d9;
+    font-size: 48px;
   }
 }
 
 .main button {
-  font-size: 24px;
-  width: 100px;
-  height: 70px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #3996d9;
+  width: 200px;
+  height: 100px;
   background-color: transparent;
-  border: 5px solid #000000;
+  border: 8px solid #3996d9;
   border-radius: 20px;
   position: relative;
-  animation: right 1.5s linear;
-}
-
-@keyframes right {
-  0% {
-    left: 1000px;
-  }
-  100% {
-    left: 0px;
-  }
 }
 
 .main button:hover {
   cursor: pointer;
-  background-color: #7c7c7c;
+  animation: color 2s linear infinite;
 }
 
-@media (max-width: 1000px) {
-  .main {
-    width: 700px;
+@keyframes color {
+  0% {
+    color: #3996d9;
+    border: 8px solid #3996d9;
   }
-}
-
-@media (max-width: 700px) {
-  .main {
-    width: 100%;
+  25% {
+    color: #e83447;
+    border: 8px solid #e83447;
+  }
+  50% {
+    color: #fbec10;
+    border: 8px solid #fbec10;
+  }
+  75% {
+    color: #f5812d;
+    border: 8px solid #f5812d;
+  }
+  100% {
+    color: #3996d9;
+    border: 8px solid #3996d9;
   }
 }

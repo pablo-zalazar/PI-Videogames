@@ -3,7 +3,7 @@ import axios from "axios";
 export function getGenres() {
   return async function (dispatch) {
     try {
-      const json = await axios.get("http://localhost:3001/genres");
+      const json = await axios.get("/genres");
       return dispatch({
         type: "GET_GENRES",
         payload: json.data,
@@ -17,7 +17,7 @@ export function getGenres() {
 export function getGames() {
   return async function (dispatch) {
     try {
-      const json = await axios.get("http://localhost:3001/videogames");
+      const json = await axios.get("/videogames");
       return dispatch({
         type: "GET_GAMES",
         payload: json.data,
@@ -65,7 +65,7 @@ export function order(payload) {
 export function getNameGame(payload) {
   return function (dispatch) {
     axios
-      .get("http://localhost:3001/videogames?name=" + payload)
+      .get("/videogames?name=" + payload)
       .then((json) => dispatch({ type: "GET_NAME_GAMES", payload: json.data }))
       .catch((e) =>
         dispatch({
@@ -79,9 +79,7 @@ export function getNameGame(payload) {
 export function getDetails(payload) {
   return async function (dispatch) {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/videogames/" + payload
-      );
+      const response = await axios.get("/videogames/" + payload);
       return dispatch({
         type: "GET_DETAILS",
         payload: response.data,
@@ -101,10 +99,7 @@ export function resetDetail() {
 export function postGame(payload) {
   // console.log(payload);
   return async function () {
-    const response = await axios.post(
-      "http://localhost:3001/videogames/add",
-      payload
-    );
+    const response = await axios.post("/videogames/add", payload);
     // console.log(response);
     return response;
   };
@@ -113,9 +108,7 @@ export function postGame(payload) {
 export function deleteGame(payload) {
   return async function () {
     try {
-      const response = await axios.delete(
-        "http://localhost:3001/videogames/delete/" + payload
-      );
+      const response = await axios.delete("/videogames/delete/" + payload);
       return response;
     } catch (e) {
       console.log(e);
@@ -126,10 +119,7 @@ export function deleteGame(payload) {
 export function updateGame(payload) {
   return async function () {
     try {
-      const response = await axios.put(
-        "http://localhost:3001/videogames/update",
-        payload
-      );
+      const response = await axios.put("/videogames/update", payload);
       return response;
     } catch (e) {
       console.log(e);
