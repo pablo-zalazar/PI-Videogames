@@ -91,12 +91,14 @@ const getApiGameId = async (id) => {
 // 5286
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+
   let game;
   if (Number(id)) {
     game = await getApiGameId(id);
   } else {
     game = (await getDbGames()).find((g) => g.id === id);
   }
+
   game.length !== 0
     ? res.status(200).json(game)
     : res.status(404).send("NOT FOUND");
@@ -136,40 +138,27 @@ router.put("/update", async (req, res) => {
   const { id, name, description, image, released, rating, platforms, genres } =
     req.body;
 
-  console.log(req.body);
   try {
-    // await Videogame.update(
-    //   {
-    //     name,
-    //     description,
-    //     image,
-    //     released,
-    //     rating,
-    //     platforms,
-    //   },
-    //   { where: { id } }
-    // );
+    await Videogame.update(
+      {
+        name,
+        description,
+        image,
+        released,
+        rating,
+        platforms,
+      },
+      { where: { id } }
+    );
 
-    await Videogame.destroy({
-      where: { id },
-    });
-
-    let gameCreated = await Videogame.create({
-      name,
-      description,
-      image,
-      released,
-      rating,
-      platforms,
-    });
-
-    // busca en el modelo genre todos los que coincidan con los pasados por body
     let genreDb = await Genre.findAll({
       where: { name: genres },
     });
 
-    // addNombreModelo es un metodo de sequelize que trae del modelo (genre) lo que se le pasa
-    gameCreated.addGenre(genreDb);
+    await game_genre.destroy({ where: { videogameId: id } });
+
+    let game = await Videogame.findOne({ where: { id } });
+    game.addGenre(genreDb);
 
     res.status(200).send("Game Updated");
   } catch (e) {
@@ -181,7 +170,7 @@ router.put("/update", async (req, res) => {
 router.post("/add", async (req, res) => {
   const { name, description, image, released, rating, platforms, genres } =
     req.body;
-  console.log(req.body);
+
   try {
     let gameCreated = await Videogame.create({
       name,

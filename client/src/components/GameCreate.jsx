@@ -187,7 +187,7 @@ export default function GameCreate() {
       dispatch(
         postGame({
           ...input,
-          name: input.name.charAt(0).toUpperCase() + input.name.slice(1),
+          // name: input.name.charAt(0).toUpperCase() + input.name.slice(1),
           rating: input.rating === "" ? 0 : input.rating,
         })
       );
@@ -271,7 +271,7 @@ export default function GameCreate() {
             <p>Platforms* </p>
             <select onChange={(e) => handleSelectPlatform(e)}>
               <option selected disabled hidden>
-                select genres
+                select platform
               </option>
               {allPlatforms?.map((g, i) => (
                 <option key={i} value={g}>
