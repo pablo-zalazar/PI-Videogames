@@ -138,6 +138,18 @@ router.put("/update", async (req, res) => {
 
   console.log(req.body);
   try {
+    // await Videogame.update(
+    //   {
+    //     name,
+    //     description,
+    //     image,
+    //     released,
+    //     rating,
+    //     platforms,
+    //   },
+    //   { where: { id } }
+    // );
+
     await Videogame.destroy({
       where: { id },
     });
@@ -160,18 +172,6 @@ router.put("/update", async (req, res) => {
     gameCreated.addGenre(genreDb);
 
     res.status(200).send("Game Updated");
-
-    // await Videogame.update(
-    //   {
-    //     name,
-    //     description,
-    //     image,
-    //     released,
-    //     rating,
-    //     platforms,
-    //   },
-    //   { where: { id } }
-    // );
   } catch (e) {
     console.log(e);
   }
@@ -181,7 +181,7 @@ router.put("/update", async (req, res) => {
 router.post("/add", async (req, res) => {
   const { name, description, image, released, rating, platforms, genres } =
     req.body;
-
+  console.log(req.body);
   try {
     let gameCreated = await Videogame.create({
       name,

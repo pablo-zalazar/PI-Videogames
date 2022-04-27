@@ -40,11 +40,10 @@ export default function GameCreate() {
     genres: [],
   });
 
-  useEffect(() => {
-    dispatch(setFirstMount(true));
-    dispatch(getGenres());
-    dispatch(getPlatforms());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getGenres());
+  //   dispatch(getPlatforms());
+  // }, [dispatch]);
 
   useEffect(() => {
     const rename = /^[0-9a-zA-ZÁ-ÿ/.:-\s]{0,40}$/;
@@ -184,6 +183,7 @@ export default function GameCreate() {
     const r = validateRating();
     const d = validateReleased();
     if (r && d) {
+      dispatch(setFirstMount(true));
       dispatch(
         postGame({
           ...input,
@@ -212,7 +212,7 @@ export default function GameCreate() {
         <form onSubmit={(e) => handleSubmit(e)} className={s.form}>
           <h1>Create Game</h1>
           <div>
-            <p>Name (max 40 characters)</p>
+            <p>Name* (max 40 characters)</p>
             <input
               type="text"
               value={input.name}
@@ -222,7 +222,7 @@ export default function GameCreate() {
             {errors.name && <span className={s.error}>{errors.name}</span>}
           </div>
           <div>
-            <p>Description (max 300 characters)</p>
+            <p>Description* (max 300 characters)</p>
             <textarea
               value={input.description}
               name="description"
@@ -268,7 +268,7 @@ export default function GameCreate() {
             ) : null}
           </div>
           <div>
-            <p>Platforms </p>
+            <p>Platforms* </p>
             <select onChange={(e) => handleSelectPlatform(e)}>
               <option selected disabled hidden>
                 select genres

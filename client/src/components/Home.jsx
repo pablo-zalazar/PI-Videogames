@@ -42,7 +42,6 @@ export default function Home() {
         dispatch(getPlatforms());
       } else {
         dispatch(filterGames(filter));
-        dispatch(setCurrentPage(1));
       }
     }
     func();
@@ -54,6 +53,7 @@ export default function Home() {
       ...filter,
       [e.target.name]: e.target.value,
     });
+    dispatch(setCurrentPage(1));
   }
 
   function handleSortName(e) {

@@ -18,13 +18,13 @@ export default function Details(props) {
   const created = myGame.createdInDb ? true : false;
 
   useEffect(() => {
-    dispatch(setFirstMount(true));
     dispatch(getDetails(props.match.params.id));
     return dispatch(resetDetail());
   }, [dispatch, props.match.params.id]);
 
   function handleDelete(e) {
     e.preventDefault();
+    dispatch(setFirstMount(true));
     dispatch(deleteGame(myGame.id));
     alert("Game deleted");
     history.push("/videogames");
