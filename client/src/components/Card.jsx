@@ -1,6 +1,5 @@
 import React from "react";
 import star from "../img/star.png";
-
 import s from "./Card.module.css";
 
 export default function Card({ name, image, rating, genres }) {

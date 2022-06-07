@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getNameGame } from "../actions";
+import { getNameGame, getGames } from "../actions";
 
 import s from "./SearchBar.module.css";
 
@@ -9,7 +9,7 @@ export default function SearchBar() {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [error, setError] = useState("");
-  const [inputDisabled, setInputDisabled] = useState(true);
+  const [inputDisabled, setInputDisabled] = useState(false);
 
   const re = /^[0-9a-zA-ZÁ-ÿ.:-\s]{0,40}$/;
 
@@ -33,9 +33,9 @@ export default function SearchBar() {
       dispatch(getNameGame(name));
       setError("");
       setName("");
-      setInputDisabled(true);
+      setInputDisabled(false);
     } else {
-      setError("Empty field");
+      dispatch(getGames());
     }
   }
 

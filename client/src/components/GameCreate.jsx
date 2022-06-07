@@ -192,15 +192,15 @@ export default function GameCreate() {
         })
       );
       alert("Game Created");
-      setInput({
-        name: "",
-        description: "",
-        image: "",
-        released: "2000-01-01",
-        rating: "",
-        platforms: [],
-        genres: [],
-      });
+      // setInput({
+      //   name: "",
+      //   description: "",
+      //   image: "",
+      //   released: "2000-01-01",
+      //   rating: "",
+      //   platforms: [],
+      //   genres: [],
+      // });
       history.push("/videogames");
     }
   }

@@ -9,10 +9,11 @@ const { APIKEY } = process.env;
 // Ejemplo: const authRouter = require('./auth.js');
 
 const getGenres = async () => {
-  // return await Genre.findAll({});
-  let allGenres = Genre.findAll({ attributes: ["name"] });
+  let allGenres = await Genre.findAll({ attributes: ["name"] });
+
   if (!allGenres.length) {
     apiResult = await axios.get(`https://api.rawg.io/api/genres?key=${APIKEY}`);
+
     allGenres = apiResult.data.results.map((g) => {
       Genre.findOrCreate({
         where: {
@@ -21,7 +22,12 @@ const getGenres = async () => {
       });
       return g.name;
     });
+  } else {
+    allGenres = allGenres.map((g) => {
+      return g.name;
+    });
   }
+
   return allGenres;
 };
 
