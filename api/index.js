@@ -23,7 +23,14 @@ const { conn } = require("./src/db.js");
 // Syncing all the models at once.
 // cambiar a true despues
 conn.sync({ force: false }).then(() => {
-  server.listen(process.env.PORT, () => {
-    console.log("%s listening at 3000"); // eslint-disable-line no-console
+  // server.listen(process.env.PORT, () => {
+  //   console.log("%s listening at 3000"); // eslint-disable-line no-console
+  // });
+  app.listen(process.env.PORT || 3000, function () {
+    console.log(
+      "Express server listening on port %d in %s mode",
+      this.address().port,
+      app.settings.env
+    );
   });
 });
