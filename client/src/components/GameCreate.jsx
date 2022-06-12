@@ -3,12 +3,7 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  postGame,
-  getGenres,
-  getPlatforms,
-  setFirstMount,
-} from "../actions/index";
+import { postGame, setFirstMount } from "../actions/index";
 
 import NavBar from "./NavBar";
 

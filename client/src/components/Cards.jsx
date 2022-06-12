@@ -8,6 +8,7 @@ import Card from "./Card";
 import Paginado from "./Paginado";
 
 import { setCurrentPage } from "../actions";
+// import { all } from "../../../api/src/routes/videogames.js";
 
 export default function Cards() {
   const allGames = useSelector((state) => state.games);
